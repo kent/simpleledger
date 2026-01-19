@@ -8,6 +8,8 @@ struct QuickTransactionView: View {
     @ObservedObject var kid: Kid
     @StateObject private var currencyManager = CurrencyManager.shared
 
+    var initialIsAdding: Bool? = nil
+
     @State private var displayValue = "0"
     @State private var isAdding = true
     @State private var note = ""
@@ -103,6 +105,11 @@ struct QuickTransactionView: View {
             }
         }
         .presentationDetents([.large])
+        .onAppear {
+            if let initial = initialIsAdding {
+                isAdding = initial
+            }
+        }
     }
 
     private var currencySymbol: String {

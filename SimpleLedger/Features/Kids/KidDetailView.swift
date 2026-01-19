@@ -12,6 +12,8 @@ struct KidDetailView: View {
     @State private var showingEditSheet = false
     @State private var showingHistory = false
     @State private var showingCustomAmount = false
+    @State private var showingAddAmount = false
+    @State private var showingSubtractAmount = false
     @State private var showingShareSheet = false
     @State private var showingStopSharingAlert = false
     @State private var showingLeaveShareAlert = false
@@ -40,22 +42,11 @@ struct KidDetailView: View {
                 // Big Balance Display
                 balanceCard
 
+                // Large Add/Subtract buttons
+                largeActionButtons
+
                 // Quick Action Buttons - the main event!
                 quickActionGrid
-
-                // Custom amount button
-                Button {
-                    showingCustomAmount = true
-                } label: {
-                    Label("Custom Amount", systemImage: "number.square")
-                        .font(.headline)
-                        .foregroundStyle(.secondary)
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(Color(.systemGray6))
-                        .clipShape(RoundedRectangle(cornerRadius: 12))
-                }
-                .padding(.horizontal)
 
                 // Recent activity peek
                 recentActivitySection
@@ -114,6 +105,12 @@ struct KidDetailView: View {
         }
         .sheet(isPresented: $showingCustomAmount) {
             QuickTransactionView(kid: kid)
+        }
+        .sheet(isPresented: $showingAddAmount) {
+            QuickTransactionView(kid: kid, initialIsAdding: true)
+        }
+        .sheet(isPresented: $showingSubtractAmount) {
+            QuickTransactionView(kid: kid, initialIsAdding: false)
         }
         .sheet(isPresented: $showingHistory) {
             NavigationStack {
@@ -242,6 +239,55 @@ struct KidDetailView: View {
             }
         }
         .padding()
+    }
+
+    // MARK: - Large Action Buttons
+
+    private var largeActionButtons: some View {
+        HStack(spacing: 16) {
+            // Add button
+            Button {
+                showingAddAmount = true
+            } label: {
+                HStack {
+                    Image(systemName: "plus")
+                        .font(.system(size: 28, weight: .bold))
+                    Text("Add")
+                        .font(.title3.bold())
+                }
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 20)
+                .background(Color.green.opacity(0.15))
+                .foregroundStyle(.green)
+                .clipShape(RoundedRectangle(cornerRadius: 16))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 16)
+                        .stroke(Color.green.opacity(0.3), lineWidth: 2)
+                )
+            }
+
+            // Subtract button
+            Button {
+                showingSubtractAmount = true
+            } label: {
+                HStack {
+                    Image(systemName: "minus")
+                        .font(.system(size: 28, weight: .bold))
+                    Text("Spend")
+                        .font(.title3.bold())
+                }
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 20)
+                .background(Color.red.opacity(0.15))
+                .foregroundStyle(.red)
+                .clipShape(RoundedRectangle(cornerRadius: 16))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 16)
+                        .stroke(Color.red.opacity(0.3), lineWidth: 2)
+                )
+            }
+        }
+        .padding(.horizontal)
     }
 
     // MARK: - Quick Action Grid
