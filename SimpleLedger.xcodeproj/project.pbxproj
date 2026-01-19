@@ -1,0 +1,488 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		A10000010000000000000001 /* SimpleLedgerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000001 /* SimpleLedgerApp.swift */; };
+		A10000010000000000000002 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000002 /* AppDelegate.swift */; };
+		A10000010000000000000003 /* PersistenceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000003 /* PersistenceController.swift */; };
+		A10000010000000000000004 /* CloudKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000004 /* CloudKitManager.swift */; };
+		A10000010000000000000005 /* CurrencyManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000005 /* CurrencyManager.swift */; };
+		A10000010000000000000006 /* KidsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000006 /* KidsListView.swift */; };
+		A10000010000000000000007 /* KidRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000007 /* KidRowView.swift */; };
+		A10000010000000000000008 /* AddKidSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000008 /* AddKidSheet.swift */; };
+		A10000010000000000000009 /* KidDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000009 /* KidDetailView.swift */; };
+		A10000010000000000000010 /* QuickTransactionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000010 /* QuickTransactionView.swift */; };
+		A10000010000000000000011 /* TransactionListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000011 /* TransactionListView.swift */; };
+		A10000010000000000000012 /* TransactionRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000012 /* TransactionRowView.swift */; };
+		A10000010000000000000013 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000013 /* SettingsView.swift */; };
+		A10000010000000000000014 /* SimpleLedger.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000014 /* SimpleLedger.xcdatamodeld */; };
+		A10000010000000000000015 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000018 /* Assets.xcassets */; };
+		A10000010000000000000016 /* ConfettiView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000019 /* ConfettiView.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		A20000010000000000000001 /* SimpleLedgerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleLedgerApp.swift; sourceTree = "<group>"; };
+		A20000010000000000000002 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		A20000010000000000000003 /* PersistenceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceController.swift; sourceTree = "<group>"; };
+		A20000010000000000000004 /* CloudKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitManager.swift; sourceTree = "<group>"; };
+		A20000010000000000000005 /* CurrencyManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyManager.swift; sourceTree = "<group>"; };
+		A20000010000000000000006 /* KidsListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KidsListView.swift; sourceTree = "<group>"; };
+		A20000010000000000000007 /* KidRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KidRowView.swift; sourceTree = "<group>"; };
+		A20000010000000000000008 /* AddKidSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddKidSheet.swift; sourceTree = "<group>"; };
+		A20000010000000000000009 /* KidDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KidDetailView.swift; sourceTree = "<group>"; };
+		A20000010000000000000010 /* QuickTransactionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickTransactionView.swift; sourceTree = "<group>"; };
+		A20000010000000000000011 /* TransactionListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionListView.swift; sourceTree = "<group>"; };
+		A20000010000000000000012 /* TransactionRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionRowView.swift; sourceTree = "<group>"; };
+		A20000010000000000000013 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		A20000010000000000000014 /* SimpleLedger.xcdatamodeld */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodeld; path = SimpleLedger.xcdatamodeld; sourceTree = "<group>"; };
+		A20000010000000000000015 /* SimpleLedger.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SimpleLedger.entitlements; sourceTree = "<group>"; };
+		A20000010000000000000016 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A20000010000000000000018 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		A20000010000000000000019 /* ConfettiView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfettiView.swift; sourceTree = "<group>"; };
+		A30000010000000000000001 /* SimpleLedger.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SimpleLedger.app; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A40000010000000000000001 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		A50000010000000000000001 = {
+			isa = PBXGroup;
+			children = (
+				A50000010000000000000002 /* SimpleLedger */,
+				A50000010000000000000003 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		A50000010000000000000002 /* SimpleLedger */ = {
+			isa = PBXGroup;
+			children = (
+				A50000010000000000000004 /* App */,
+				A50000010000000000000005 /* Core */,
+				A50000010000000000000006 /* Features */,
+				A50000010000000000000007 /* Resources */,
+			);
+			path = SimpleLedger;
+			sourceTree = "<group>";
+		};
+		A50000010000000000000003 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A30000010000000000000001 /* SimpleLedger.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		A50000010000000000000004 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				A20000010000000000000001 /* SimpleLedgerApp.swift */,
+				A20000010000000000000002 /* AppDelegate.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		A50000010000000000000005 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				A50000010000000000000008 /* Persistence */,
+				A50000010000000000000009 /* Extensions */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		A50000010000000000000006 /* Features */ = {
+			isa = PBXGroup;
+			children = (
+				A50000010000000000000010 /* Kids */,
+				A50000010000000000000011 /* Transactions */,
+				A50000010000000000000012 /* Settings */,
+			);
+			path = Features;
+			sourceTree = "<group>";
+		};
+		A50000010000000000000007 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				A20000010000000000000018 /* Assets.xcassets */,
+				A20000010000000000000015 /* SimpleLedger.entitlements */,
+				A20000010000000000000016 /* Info.plist */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		A50000010000000000000008 /* Persistence */ = {
+			isa = PBXGroup;
+			children = (
+				A20000010000000000000003 /* PersistenceController.swift */,
+				A20000010000000000000004 /* CloudKitManager.swift */,
+				A20000010000000000000014 /* SimpleLedger.xcdatamodeld */,
+			);
+			path = Persistence;
+			sourceTree = "<group>";
+		};
+		A50000010000000000000009 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				A20000010000000000000005 /* CurrencyManager.swift */,
+				A20000010000000000000019 /* ConfettiView.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		A50000010000000000000010 /* Kids */ = {
+			isa = PBXGroup;
+			children = (
+				A20000010000000000000006 /* KidsListView.swift */,
+				A20000010000000000000007 /* KidRowView.swift */,
+				A20000010000000000000008 /* AddKidSheet.swift */,
+				A20000010000000000000009 /* KidDetailView.swift */,
+			);
+			path = Kids;
+			sourceTree = "<group>";
+		};
+		A50000010000000000000011 /* Transactions */ = {
+			isa = PBXGroup;
+			children = (
+				A20000010000000000000010 /* QuickTransactionView.swift */,
+				A20000010000000000000011 /* TransactionListView.swift */,
+				A20000010000000000000012 /* TransactionRowView.swift */,
+			);
+			path = Transactions;
+			sourceTree = "<group>";
+		};
+		A50000010000000000000012 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				A20000010000000000000013 /* SettingsView.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		A60000010000000000000001 /* SimpleLedger */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A70000010000000000000001 /* Build configuration list for PBXNativeTarget "SimpleLedger" */;
+			buildPhases = (
+				A80000010000000000000001 /* Sources */,
+				A40000010000000000000001 /* Frameworks */,
+				A90000010000000000000001 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SimpleLedger;
+			productName = SimpleLedger;
+			productReference = A30000010000000000000001 /* SimpleLedger.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		B00000010000000000000001 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1500;
+				LastUpgradeCheck = 1500;
+				TargetAttributes = {
+					A60000010000000000000001 = {
+						CreatedOnToolsVersion = 15.0;
+					};
+				};
+			};
+			buildConfigurationList = B10000010000000000000001 /* Build configuration list for PBXProject "SimpleLedger" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = A50000010000000000000001;
+			productRefGroup = A50000010000000000000003 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				A60000010000000000000001 /* SimpleLedger */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		A90000010000000000000001 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A10000010000000000000015 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A80000010000000000000001 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A10000010000000000000001 /* SimpleLedgerApp.swift in Sources */,
+				A10000010000000000000002 /* AppDelegate.swift in Sources */,
+				A10000010000000000000003 /* PersistenceController.swift in Sources */,
+				A10000010000000000000004 /* CloudKitManager.swift in Sources */,
+				A10000010000000000000005 /* CurrencyManager.swift in Sources */,
+				A10000010000000000000006 /* KidsListView.swift in Sources */,
+				A10000010000000000000007 /* KidRowView.swift in Sources */,
+				A10000010000000000000008 /* AddKidSheet.swift in Sources */,
+				A10000010000000000000009 /* KidDetailView.swift in Sources */,
+				A10000010000000000000010 /* QuickTransactionView.swift in Sources */,
+				A10000010000000000000011 /* TransactionListView.swift in Sources */,
+				A10000010000000000000012 /* TransactionRowView.swift in Sources */,
+				A10000010000000000000013 /* SettingsView.swift in Sources */,
+				A10000010000000000000014 /* SimpleLedger.xcdatamodeld in Sources */,
+				A10000010000000000000016 /* ConfettiView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		C10000010000000000000001 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		C10000010000000000000002 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		C20000010000000000000001 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = SimpleLedger/Resources/SimpleLedger.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = SimpleLedger/Resources/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = SimpleLedger;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.simpleledger.app;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		C20000010000000000000002 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = SimpleLedger/Resources/SimpleLedger.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = SimpleLedger/Resources/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = SimpleLedger;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.simpleledger.app;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		A70000010000000000000001 /* Build configuration list for PBXNativeTarget "SimpleLedger" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C20000010000000000000001 /* Debug */,
+				C20000010000000000000002 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B10000010000000000000001 /* Build configuration list for PBXProject "SimpleLedger" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C10000010000000000000001 /* Debug */,
+				C10000010000000000000002 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		A20000010000000000000014 /* SimpleLedger.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				A20000010000000000000017 /* SimpleLedger.xcdatamodel */,
+			);
+			currentVersion = A20000010000000000000017 /* SimpleLedger.xcdatamodel */;
+			path = SimpleLedger.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+		A20000010000000000000017 /* SimpleLedger.xcdatamodel */ = {
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.xcdatamodel;
+			path = SimpleLedger.xcdatamodel;
+			sourceTree = "<group>";
+		};
+/* End XCVersionGroup section */
+	};
+	rootObject = B00000010000000000000001 /* Project object */;
+}
