@@ -1,9 +1,11 @@
 import SwiftUI
 import CoreData
+import StoreKit
 
 struct KidDetailView: View {
     @Environment(\.managedObjectContext) private var viewContext
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.requestReview) private var requestReview
     @EnvironmentObject private var persistenceController: PersistenceController
     @StateObject private var cloudKitManager = CloudKitManager.shared
     @ObservedObject var kid: Kid
@@ -413,6 +415,18 @@ struct KidDetailView: View {
         transaction.kid = kid
 
         persistenceController.save()
+
+        // Track transaction count and request review after 3rd transaction
+        let transactionCountKey = "totalTransactionCount"
+        let count = UserDefaults.standard.integer(forKey: transactionCountKey) + 1
+        UserDefaults.standard.set(count, forKey: transactionCountKey)
+
+        if count == 3 {
+            // Request review after a brief delay to let the animation finish
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                requestReview()
+            }
+        }
     }
 
     private func animateChange(_ amount: Decimal) {

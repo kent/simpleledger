@@ -23,6 +23,7 @@
 		A10000010000000000000014 /* SimpleLedger.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000014 /* SimpleLedger.xcdatamodeld */; };
 		A10000010000000000000015 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000018 /* Assets.xcassets */; };
 		A10000010000000000000016 /* ConfettiView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000019 /* ConfettiView.swift */; };
+		A10000010000000000000020 /* JointLedgerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000020 /* JointLedgerView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -44,6 +45,7 @@
 		A20000010000000000000016 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A20000010000000000000018 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A20000010000000000000019 /* ConfettiView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfettiView.swift; sourceTree = "<group>"; };
+		A20000010000000000000020 /* JointLedgerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JointLedgerView.swift; sourceTree = "<group>"; };
 		A30000010000000000000001 /* SimpleLedger.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SimpleLedger.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -159,6 +161,7 @@
 				A20000010000000000000010 /* QuickTransactionView.swift */,
 				A20000010000000000000011 /* TransactionListView.swift */,
 				A20000010000000000000012 /* TransactionRowView.swift */,
+				A20000010000000000000020 /* JointLedgerView.swift */,
 			);
 			path = Transactions;
 			sourceTree = "<group>";
@@ -255,6 +258,7 @@
 				A10000010000000000000013 /* SettingsView.swift in Sources */,
 				A10000010000000000000014 /* SimpleLedger.xcdatamodeld in Sources */,
 				A10000010000000000000016 /* ConfettiView.swift in Sources */,
+				A10000010000000000000020 /* JointLedgerView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

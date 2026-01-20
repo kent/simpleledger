@@ -118,17 +118,28 @@ struct KidsListView: View {
     private var kidsList: some View {
         List {
             Section {
-                HStack {
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text("Total Balance")
-                            .font(.subheadline)
-                            .foregroundStyle(.secondary)
-                        Text(totalBalance, format: .currency(code: CurrencyManager.shared.currencyCode))
-                            .font(.title.bold())
+                NavigationLink {
+                    JointLedgerView()
+                } label: {
+                    HStack {
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text("Total Balance")
+                                .font(.subheadline)
+                                .foregroundStyle(.secondary)
+                            Text(totalBalance, format: .currency(code: CurrencyManager.shared.currencyCode))
+                                .font(.title.bold())
+                        }
+                        Spacer()
+                        VStack(alignment: .trailing, spacing: 4) {
+                            Text("Joint Ledger")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                            Image(systemName: "list.bullet.rectangle")
+                                .foregroundStyle(.secondary)
+                        }
                     }
-                    Spacer()
+                    .padding(.vertical, 8)
                 }
-                .padding(.vertical, 8)
             }
 
             // My Ledgers section (private kids)
