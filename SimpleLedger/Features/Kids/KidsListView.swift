@@ -8,6 +8,7 @@ struct KidsListView: View {
 
     @State private var privateKids: [Kid] = []
     @State private var sharedKids: [Kid] = []
+    @State private var allTransactions: [Transaction] = []
     @State private var showingAddKid = false
     @State private var showingSettings = false
     @State private var kidToShare: Kid?
@@ -100,6 +101,20 @@ struct KidsListView: View {
             privateKids = result.privateKids
             sharedKids = result.sharedKids
         }
+        refreshTransactions()
+    }
+
+    private func refreshTransactions() {
+        let request = NSFetchRequest<Transaction>(entityName: "Transaction")
+        request.sortDescriptors = [NSSortDescriptor(keyPath: \Transaction.createdAt, ascending: false)]
+        request.fetchLimit = 20 // Show most recent 20 transactions
+
+        do {
+            allTransactions = try viewContext.fetch(request)
+        } catch {
+            print("Failed to fetch transactions: \(error)")
+            allTransactions = []
+        }
     }
 
     private var emptyState: some View {
@@ -118,28 +133,17 @@ struct KidsListView: View {
     private var kidsList: some View {
         List {
             Section {
-                NavigationLink {
-                    JointLedgerView()
-                } label: {
-                    HStack {
-                        VStack(alignment: .leading, spacing: 4) {
-                            Text("Total Balance")
-                                .font(.subheadline)
-                                .foregroundStyle(.secondary)
-                            Text(totalBalance, format: .currency(code: CurrencyManager.shared.currencyCode))
-                                .font(.title.bold())
-                        }
-                        Spacer()
-                        VStack(alignment: .trailing, spacing: 4) {
-                            Text("Joint Ledger")
-                                .font(.caption)
-                                .foregroundStyle(.secondary)
-                            Image(systemName: "list.bullet.rectangle")
-                                .foregroundStyle(.secondary)
-                        }
+                HStack {
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("Total Balance")
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                        Text(totalBalance, format: .currency(code: CurrencyManager.shared.currencyCode))
+                            .font(.title.bold())
                     }
-                    .padding(.vertical, 8)
+                    Spacer()
                 }
+                .padding(.vertical, 8)
             }
 
             // My Ledgers section (private kids)
@@ -189,9 +193,93 @@ struct KidsListView: View {
                     }
                 }
             }
+
+            // All Transactions section
+            Section("Transactions") {
+                if allTransactions.isEmpty {
+                    Text("No transactions yet")
+                        .foregroundStyle(.secondary)
+                        .frame(maxWidth: .infinity, alignment: .center)
+                        .padding(.vertical, 20)
+                } else {
+                    ForEach(allTransactions, id: \.id) { transaction in
+                        TransactionRowWithKid(transaction: transaction)
+                    }
+                }
+            }
         }
         .navigationDestination(for: Kid.self) { kid in
             KidDetailView(kid: kid)
+        }
+    }
+
+    // MARK: - Transaction Row with Kid Info
+
+    private struct TransactionRowWithKid: View {
+        @ObservedObject var transaction: Transaction
+        @StateObject private var currencyManager = CurrencyManager.shared
+
+        private var isDeposit: Bool {
+            (transaction.amount as Decimal? ?? 0) >= 0
+        }
+
+        private var amount: Decimal {
+            transaction.amount as Decimal? ?? 0
+        }
+
+        private var kidName: String {
+            transaction.kid?.name ?? "Unknown"
+        }
+
+        private var kidEmoji: String {
+            transaction.kid?.avatarEmoji ?? "👤"
+        }
+
+        private var kidColor: Color {
+            Color(hex: transaction.kid?.colorHex ?? "007AFF")
+        }
+
+        var body: some View {
+            HStack(spacing: 12) {
+                // Kid Avatar
+                ZStack {
+                    Circle()
+                        .fill(kidColor.opacity(0.2))
+                        .frame(width: 36, height: 36)
+
+                    Text(kidEmoji)
+                        .font(.subheadline)
+                }
+
+                // Details
+                VStack(alignment: .leading, spacing: 2) {
+                    HStack(spacing: 4) {
+                        Text(kidName)
+                            .font(.subheadline.weight(.medium))
+
+                        if let note = transaction.note, !note.isEmpty {
+                            Text("·")
+                                .foregroundStyle(.secondary)
+                            Text(note)
+                                .font(.subheadline)
+                                .foregroundStyle(.secondary)
+                                .lineLimit(1)
+                        }
+                    }
+
+                    Text(transaction.createdAt ?? Date(), style: .relative)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+
+                Spacer()
+
+                // Amount
+                Text(amount, format: .currency(code: currencyManager.currencyCode))
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(isDeposit ? .green : .red)
+            }
+            .padding(.vertical, 2)
         }
     }
 
