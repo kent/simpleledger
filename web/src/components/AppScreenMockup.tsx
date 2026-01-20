@@ -9,9 +9,9 @@ const kids = [
 ]
 
 const transactions = [
-  { kid: 'Emma', amount: 10, note: 'Weekly allowance 💵', type: 'add' },
-  { kid: 'Jake', amount: -5, note: 'Ice cream 🍦', type: 'spend' },
-  { kid: 'Lily', amount: 20, note: 'Birthday from Grandma 🎂', type: 'add' },
+  { kid: 'Emma', amount: 10, note: 'Weekly allowance 💵', type: 'add', time: '2m' },
+  { kid: 'Jake', amount: -5, note: 'Ice cream 🍦', type: 'spend', time: '1h' },
+  { kid: 'Lily', amount: 20, note: 'Birthday from Grandma 🎂', type: 'add', time: '3h' },
 ]
 
 export function AppScreenMockup() {
@@ -94,9 +94,12 @@ export function AppScreenMockup() {
               className="flex items-center justify-between rounded-xl bg-white px-2.5 py-2 shadow-sm"
             >
               <div className="flex flex-col">
-                <span className="text-xs font-medium text-gray-900">
-                  {tx.kid}
-                </span>
+                <div className="flex items-center gap-1">
+                  <span className="text-xs font-medium text-gray-900">
+                    {tx.kid}
+                  </span>
+                  <span className="text-[9px] text-gray-400">{tx.time}</span>
+                </div>
                 <span className="text-[10px] text-gray-500">{tx.note}</span>
               </div>
               <motion.span
