@@ -7,7 +7,6 @@ struct SettingsView: View {
     @EnvironmentObject private var persistenceController: PersistenceController
     @StateObject private var currencyManager = CurrencyManager.shared
 
-    @State private var showingSharingSheet = false
     @State private var showingAbout = false
 
     var body: some View {
@@ -36,15 +35,22 @@ struct SettingsView: View {
 
                 // Sharing Section
                 Section {
-                    Button {
-                        showingSharingSheet = true
-                    } label: {
-                        Label("Family Sharing", systemImage: "person.2.fill")
+                    HStack {
+                        Image(systemName: "person.2.fill")
+                            .foregroundStyle(.blue)
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text("Per-Child Sharing")
+                                .font(.body)
+                            Text("Share individual ledgers by swiping on a child's row")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
                     }
+                    .padding(.vertical, 4)
                 } header: {
                     Text("Sharing")
                 } footer: {
-                    Text("Share your data with family members so everyone can track the kids' money together.")
+                    Text("Each child's ledger can be shared independently. Swipe left on a child in the main list and tap 'Share' to invite family members.")
                 }
 
                 // About Section
@@ -87,9 +93,6 @@ struct SettingsView: View {
                         dismiss()
                     }
                 }
-            }
-            .sheet(isPresented: $showingSharingSheet) {
-                ShareConfigurationView(persistenceController: persistenceController)
             }
         }
     }

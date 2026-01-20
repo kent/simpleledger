@@ -12,6 +12,8 @@ struct KidsListView: View {
     @State private var showingSettings = false
     @State private var kidToShare: Kid?
     @State private var showShareSheet = false
+    @State private var errorMessage: String?
+    @State private var showingErrorAlert = false
 
     private var totalBalance: Decimal {
         (privateKids + sharedKids).reduce(Decimal.zero) { $0 + $1.balance }
@@ -74,6 +76,20 @@ struct KidsListView: View {
             }
             .onReceive(NotificationCenter.default.publisher(for: .didAcceptCloudKitShare)) { _ in
                 refreshKids()
+            }
+            .onReceive(NotificationCenter.default.publisher(for: .didReceiveRemoteChanges)) { _ in
+                refreshKids()
+            }
+            .onReceive(NotificationCenter.default.publisher(for: .shareAcceptanceFailed)) { notification in
+                if let error = notification.userInfo?["error"] as? String {
+                    errorMessage = error
+                    showingErrorAlert = true
+                }
+            }
+            .alert("Sharing Error", isPresented: $showingErrorAlert) {
+                Button("OK", role: .cancel) { }
+            } message: {
+                Text(errorMessage ?? "An unknown error occurred")
             }
         }
     }
@@ -184,7 +200,10 @@ struct KidsListView: View {
                     refreshKids()
                 }
             } catch {
-                print("Failed to leave share: \(error)")
+                await MainActor.run {
+                    errorMessage = "Failed to stop viewing: \(error.localizedDescription)"
+                    showingErrorAlert = true
+                }
             }
         }
     }

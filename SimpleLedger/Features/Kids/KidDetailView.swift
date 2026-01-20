@@ -21,6 +21,8 @@ struct KidDetailView: View {
     @State private var lastChange: Decimal = 0
     @State private var showChangeIndicator = false
     @State private var showConfetti = false
+    @State private var errorMessage: String?
+    @State private var showingErrorAlert = false
 
     private let quickAmounts: [Decimal] = [1, 5, 10, 20]
 
@@ -146,6 +148,23 @@ struct KidDetailView: View {
             Text("You will no longer be able to view \(kid.name ?? "this ledger")'s transactions.")
         }
         .confetti(isShowing: $showConfetti)
+        .alert("Error", isPresented: $showingErrorAlert) {
+            Button("OK", role: .cancel) { }
+        } message: {
+            Text(errorMessage ?? "An unknown error occurred")
+        }
+        .onReceive(NotificationCenter.default.publisher(for: .didReceiveRemoteChanges)) { _ in
+            // Check if this kid was deleted remotely
+            if kid.isFault || kid.isDeleted || kid.managedObjectContext == nil {
+                dismiss()
+            }
+        }
+        .onChange(of: kid.isFault) { _, isFault in
+            // Dismiss if the kid becomes a fault (deleted remotely)
+            if isFault {
+                dismiss()
+            }
+        }
     }
 
     // MARK: - Shared Banner
@@ -178,7 +197,10 @@ struct KidDetailView: View {
             do {
                 try await persistenceController.stopSharing(kid: kid)
             } catch {
-                print("Failed to stop sharing: \(error)")
+                await MainActor.run {
+                    errorMessage = "Failed to stop sharing: \(error.localizedDescription)"
+                    showingErrorAlert = true
+                }
             }
         }
     }
@@ -191,7 +213,10 @@ struct KidDetailView: View {
                     dismiss()
                 }
             } catch {
-                print("Failed to leave share: \(error)")
+                await MainActor.run {
+                    errorMessage = "Failed to stop viewing: \(error.localizedDescription)"
+                    showingErrorAlert = true
+                }
             }
         }
     }

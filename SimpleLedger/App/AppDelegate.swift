@@ -74,8 +74,26 @@ class SceneDelegate: NSObject, UIWindowSceneDelegate {
     private func acceptShare(metadata: CKShare.Metadata) async {
         let persistenceController = PersistenceController.shared
 
+        // Wait for stores to be loaded before attempting to accept share
+        let storesReady = await persistenceController.waitForStoresLoaded(timeout: 15.0)
+
+        guard storesReady else {
+            print("Stores failed to load in time for share acceptance")
+            NotificationCenter.default.post(
+                name: .shareAcceptanceFailed,
+                object: nil,
+                userInfo: ["error": "Stores not ready. Please try again."]
+            )
+            return
+        }
+
         guard let sharedStore = persistenceController.sharedPersistentStore else {
-            print("Shared store not available")
+            print("Shared store not available after loading")
+            NotificationCenter.default.post(
+                name: .shareAcceptanceFailed,
+                object: nil,
+                userInfo: ["error": "Unable to access shared data store."]
+            )
             return
         }
 
@@ -86,8 +104,20 @@ class SceneDelegate: NSObject, UIWindowSceneDelegate {
             )
             // Post notification to refresh UI
             NotificationCenter.default.post(name: .didAcceptCloudKitShare, object: nil)
+            print("Successfully accepted share invitation")
         } catch {
             print("Failed to accept share: \(error)")
+            NotificationCenter.default.post(
+                name: .shareAcceptanceFailed,
+                object: nil,
+                userInfo: ["error": error.localizedDescription]
+            )
         }
     }
+}
+
+// MARK: - Share Acceptance Notification
+
+extension Notification.Name {
+    static let shareAcceptanceFailed = Notification.Name("shareAcceptanceFailed")
 }

@@ -4,6 +4,12 @@ import CloudKit
 final class PersistenceController: ObservableObject {
     static let shared = PersistenceController()
 
+    /// Published flag indicating when persistent stores are fully loaded and ready
+    @Published private(set) var storesLoaded = false
+
+    /// Error that occurred during store loading, if any
+    @Published private(set) var storeLoadError: Error?
+
     static var preview: PersistenceController = {
         let controller = PersistenceController(inMemory: true)
         let viewContext = controller.container.viewContext
@@ -95,10 +101,28 @@ final class PersistenceController: ObservableObject {
             configureCloudKitStores()
         }
 
-        container.loadPersistentStores { storeDescription, error in
-            if let error = error as NSError? {
-                // In production, handle this gracefully
-                fatalError("Persistent store loading failed: \(error), \(error.userInfo)")
+        // Track how many stores we expect to load
+        let expectedStoreCount = container.persistentStoreDescriptions.count
+        var loadedStoreCount = 0
+
+        container.loadPersistentStores { [weak self] storeDescription, error in
+            if let error = error {
+                DispatchQueue.main.async {
+                    self?.storeLoadError = error
+                }
+                print("Persistent store loading failed for \(storeDescription.url?.lastPathComponent ?? "unknown"): \(error)")
+                return
+            }
+
+            loadedStoreCount += 1
+            print("Loaded store: \(storeDescription.url?.lastPathComponent ?? "unknown")")
+
+            // Mark stores as loaded when all stores are ready
+            if loadedStoreCount == expectedStoreCount {
+                DispatchQueue.main.async {
+                    self?.storesLoaded = true
+                    print("All persistent stores loaded successfully")
+                }
             }
         }
 
@@ -152,9 +176,80 @@ final class PersistenceController: ObservableObject {
         // Process remote changes on a background context
         let context = container.newBackgroundContext()
         context.perform {
-            // Merge changes will happen automatically due to automaticallyMergesChangesFromParent
-            // Additional processing can be done here if needed
+            // Process persistent history to detect what changed
+            guard let storeUUID = notification.userInfo?[NSStoreUUIDKey] as? String else { return }
+
+            // Fetch the history since last processed
+            let historyRequest = NSPersistentHistoryChangeRequest.fetchHistory(after: self.lastHistoryToken)
+
+            if let historyResult = try? context.execute(historyRequest) as? NSPersistentHistoryResult,
+               let transactions = historyResult.result as? [NSPersistentHistoryTransaction],
+               !transactions.isEmpty {
+
+                // Update the token for next time
+                self.lastHistoryToken = transactions.last?.token
+
+                // Check if any Kid or Transaction objects changed
+                var kidsChanged = false
+                var transactionsChanged = false
+
+                for transaction in transactions {
+                    if let changes = transaction.changes {
+                        for change in changes {
+                            if change.changedObjectID.entity.name == "Kid" {
+                                kidsChanged = true
+                            } else if change.changedObjectID.entity.name == "Transaction" {
+                                transactionsChanged = true
+                            }
+                        }
+                    }
+                }
+
+                // Post notification on main thread if relevant changes detected
+                if kidsChanged || transactionsChanged {
+                    DispatchQueue.main.async {
+                        NotificationCenter.default.post(
+                            name: .didReceiveRemoteChanges,
+                            object: nil,
+                            userInfo: [
+                                "kidsChanged": kidsChanged,
+                                "transactionsChanged": transactionsChanged,
+                                "storeUUID": storeUUID
+                            ]
+                        )
+                    }
+                }
+            }
         }
+    }
+
+    /// Token for tracking persistent history processing
+    private var lastHistoryToken: NSPersistentHistoryToken? {
+        get {
+            guard let data = UserDefaults.standard.data(forKey: "lastHistoryToken") else { return nil }
+            return try? NSKeyedUnarchiver.unarchivedObject(ofClass: NSPersistentHistoryToken.self, from: data)
+        }
+        set {
+            if let token = newValue,
+               let data = try? NSKeyedArchiver.archivedData(withRootObject: token, requiringSecureCoding: true) {
+                UserDefaults.standard.set(data, forKey: "lastHistoryToken")
+            }
+        }
+    }
+
+    // MARK: - Store Readiness
+
+    /// Waits for persistent stores to be loaded, with a timeout
+    func waitForStoresLoaded(timeout: TimeInterval = 10.0) async -> Bool {
+        if storesLoaded { return true }
+
+        let deadline = Date().addingTimeInterval(timeout)
+
+        while !storesLoaded && Date() < deadline {
+            try? await Task.sleep(nanoseconds: 100_000_000) // 0.1 seconds
+        }
+
+        return storesLoaded
     }
 
     // MARK: - Convenience Methods
@@ -367,4 +462,11 @@ extension Kid {
     var displayColor: String {
         colorHex ?? "007AFF"
     }
+}
+
+// MARK: - Remote Changes Notification
+
+extension Notification.Name {
+    /// Posted when remote changes are received from CloudKit
+    static let didReceiveRemoteChanges = Notification.Name("didReceiveRemoteChanges")
 }
