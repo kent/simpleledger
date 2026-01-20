@@ -239,8 +239,14 @@ struct KidsListView: View {
             Color(hex: transaction.kid?.colorHex ?? "007AFF")
         }
 
-        private var creatorName: String {
-            transaction.createdByName ?? "Unknown"
+        private var creatorName: String? {
+            // Only show creator name if it exists and is different from current user
+            guard let name = transaction.createdByName, !name.isEmpty else { return nil }
+            let currentUser = CloudKitManager.shared.currentUserName
+            if let currentUser = currentUser, name == currentUser {
+                return nil // Don't show if it's the current user
+            }
+            return name
         }
 
         var body: some View {
@@ -272,12 +278,14 @@ struct KidsListView: View {
                     }
 
                     HStack(spacing: 4) {
-                        Text(creatorName)
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                        Text("·")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
+                        if let creator = creatorName {
+                            Text(creator)
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                            Text("·")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
                         Text(transaction.createdAt ?? Date(), style: .relative)
                             .font(.caption)
                             .foregroundStyle(.secondary)
