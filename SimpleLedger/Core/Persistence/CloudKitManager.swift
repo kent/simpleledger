@@ -10,6 +10,7 @@ final class CloudKitManager: ObservableObject {
     @Published var isSignedIntoiCloud = false
     @Published var permissionStatus: Bool = false
     @Published var error: String?
+    @Published var currentUserName: String?
 
     private let container: CKContainer
 
@@ -17,6 +18,7 @@ final class CloudKitManager: ObservableObject {
         container = CKContainer(identifier: "iCloud.com.simpleledger.app")
         Task {
             await checkiCloudStatus()
+            await fetchCurrentUserName()
         }
     }
 
@@ -30,6 +32,24 @@ final class CloudKitManager: ObservableObject {
         } catch {
             self.error = "Error checking iCloud status: \(error.localizedDescription)"
             isSignedIntoiCloud = false
+        }
+    }
+
+    func fetchCurrentUserName() async {
+        do {
+            let userID = try await container.userRecordID()
+            let userIdentity = try await container.userIdentity(forUserRecordID: userID)
+
+            if let nameComponents = userIdentity?.nameComponents {
+                currentUserName = PersonNameComponentsFormatter.localizedString(from: nameComponents, style: .short)
+            } else {
+                // Fallback to device name if CloudKit name not available
+                currentUserName = UIDevice.current.name
+            }
+        } catch {
+            print("Failed to fetch user name: \(error)")
+            // Fallback to device name
+            currentUserName = UIDevice.current.name
         }
     }
 

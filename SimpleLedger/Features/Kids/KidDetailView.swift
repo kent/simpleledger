@@ -412,6 +412,7 @@ struct KidDetailView: View {
         transaction.id = UUID()
         transaction.amount = NSDecimalNumber(decimal: amount)
         transaction.createdAt = Date()
+        transaction.createdByName = cloudKitManager.currentUserName ?? "Me"
         transaction.kid = kid
 
         persistenceController.save()

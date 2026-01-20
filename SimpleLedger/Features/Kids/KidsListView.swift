@@ -194,8 +194,8 @@ struct KidsListView: View {
                 }
             }
 
-            // All Transactions section
-            Section("Transactions") {
+            // All Transactions section (no header)
+            Section {
                 if allTransactions.isEmpty {
                     Text("No transactions yet")
                         .foregroundStyle(.secondary)
@@ -239,6 +239,10 @@ struct KidsListView: View {
             Color(hex: transaction.kid?.colorHex ?? "007AFF")
         }
 
+        private var creatorName: String {
+            transaction.createdByName ?? "Unknown"
+        }
+
         var body: some View {
             HStack(spacing: 12) {
                 // Kid Avatar
@@ -267,9 +271,17 @@ struct KidsListView: View {
                         }
                     }
 
-                    Text(transaction.createdAt ?? Date(), style: .relative)
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
+                    HStack(spacing: 4) {
+                        Text(creatorName)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                        Text("·")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                        Text(transaction.createdAt ?? Date(), style: .relative)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
                 }
 
                 Spacer()
