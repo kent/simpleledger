@@ -33,7 +33,7 @@ struct KidsListView: View {
                     kidsList
                 }
             }
-            .navigationTitle("SimpleLedger")
+            .navigationTitle("Munnies")
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
                     Button {

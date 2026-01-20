@@ -153,7 +153,7 @@ final class PersistenceController: ObservableObject {
 
         // Configure private store (user's own data)
         privateDescription.cloudKitContainerOptions = NSPersistentCloudKitContainerOptions(
-            containerIdentifier: "iCloud.com.simpleledger.app"
+            containerIdentifier: "iCloud.com.munnies.app"
         )
         privateDescription.setOption(true as NSNumber, forKey: NSPersistentHistoryTrackingKey)
         privateDescription.setOption(true as NSNumber, forKey: NSPersistentStoreRemoteChangeNotificationPostOptionKey)
@@ -164,7 +164,7 @@ final class PersistenceController: ObservableObject {
         sharedDescription.setOption(true as NSNumber, forKey: NSPersistentStoreRemoteChangeNotificationPostOptionKey)
 
         let sharedOptions = NSPersistentCloudKitContainerOptions(
-            containerIdentifier: "iCloud.com.simpleledger.app"
+            containerIdentifier: "iCloud.com.munnies.app"
         )
         sharedOptions.databaseScope = .shared
         sharedDescription.cloudKitContainerOptions = sharedOptions
@@ -414,7 +414,7 @@ final class PersistenceController: ObservableObject {
     func stopSharing(kid: Kid) async throws {
         guard let share = try fetchShare(for: kid) else { return }
 
-        let cloudContainer = CKContainer(identifier: "iCloud.com.simpleledger.app")
+        let cloudContainer = CKContainer(identifier: "iCloud.com.munnies.app")
         try await cloudContainer.privateCloudDatabase.deleteRecord(withID: share.recordID)
     }
 
@@ -423,7 +423,7 @@ final class PersistenceController: ObservableObject {
         let status = shareStatus(for: kid)
         guard let share = status.share, !status.isOwner else { return }
 
-        let cloudContainer = CKContainer(identifier: "iCloud.com.simpleledger.app")
+        let cloudContainer = CKContainer(identifier: "iCloud.com.munnies.app")
         let operation = CKModifyRecordZonesOperation(
             recordZonesToSave: nil,
             recordZoneIDsToDelete: [share.recordID.zoneID]

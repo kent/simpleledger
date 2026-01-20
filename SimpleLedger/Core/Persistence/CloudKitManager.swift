@@ -15,7 +15,7 @@ final class CloudKitManager: ObservableObject {
     private let container: CKContainer
 
     init() {
-        container = CKContainer(identifier: "iCloud.com.simpleledger.app")
+        container = CKContainer(identifier: "iCloud.com.munnies.app")
         Task {
             await checkiCloudStatus()
             await fetchCurrentUserName()
@@ -70,7 +70,7 @@ struct KidCloudSharingView: UIViewControllerRepresentable {
         Task { @MainActor in
             do {
                 let share = try await persistenceController.shareKid(kid)
-                let container = CKContainer(identifier: "iCloud.com.simpleledger.app")
+                let container = CKContainer(identifier: "iCloud.com.munnies.app")
 
                 let controller = UICloudSharingController(share: share, container: container)
                 controller.modalPresentationStyle = .formSheet
