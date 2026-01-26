@@ -6,15 +6,16 @@ struct KidRowView: View {
     var shareStatus: PersistenceController.KidShareStatus?
 
     var body: some View {
-        HStack(spacing: 12) {
-            // Avatar
+        HStack(spacing: 16) {
+            // Avatar - larger with shadow
             ZStack {
                 Circle()
                     .fill(Color(hex: kid.displayColor).opacity(0.2))
-                    .frame(width: 50, height: 50)
+                    .frame(width: 60, height: 60)
+                    .shadow(color: Color(hex: kid.displayColor).opacity(0.3), radius: 4, x: 0, y: 2)
 
-                Text(kid.avatarEmoji ?? "👤")
-                    .font(.title)
+                Text(kid.avatarEmoji ?? "\u{1F464}")
+                    .font(.system(size: 28))
             }
 
             // Name and last activity
@@ -33,23 +34,23 @@ struct KidRowView: View {
 
                 if let lastTransaction = kid.sortedTransactions.first {
                     Text(lastTransaction.createdAt ?? Date(), style: .relative)
-                        .font(.caption)
+                        .font(.subheadline)
                         .foregroundStyle(.secondary)
                 } else {
                     Text("No transactions")
-                        .font(.caption)
+                        .font(.subheadline)
                         .foregroundStyle(.secondary)
                 }
             }
 
             Spacer()
 
-            // Balance
+            // Balance - improved typography
             Text(kid.balance, format: .currency(code: currencyManager.currencyCode))
-                .font(.headline)
+                .font(.system(.title3, design: .rounded, weight: .semibold))
                 .foregroundColor(kid.balance >= 0 ? .primary : .red)
         }
-        .padding(.vertical, 4)
+        .padding(.vertical, 8)
     }
 }
 

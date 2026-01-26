@@ -118,15 +118,40 @@ struct KidsListView: View {
     }
 
     private var emptyState: some View {
-        ContentUnavailableView {
-            Label("No Kids Yet", systemImage: "person.3")
-        } description: {
-            Text("Add your first child to start tracking their money.")
-        } actions: {
-            Button("Add Child") {
+        VStack(spacing: 24) {
+            Spacer()
+
+            // Piggy bank illustration
+            HStack(spacing: -8) {
+                Text("\u{1F437}")
+                    .font(.system(size: 60))
+                Text("\u{1F4B0}")
+                    .font(.system(size: 50))
+            }
+
+            VStack(spacing: 8) {
+                Text("Start Tracking")
+                    .font(.title2.bold())
+
+                Text("Add your first child to keep track of their savings, gifts, and spending.")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal, 32)
+            }
+
+            Button {
                 showingAddKid = true
+            } label: {
+                Label("Add Child", systemImage: "plus")
+                    .font(.headline)
+                    .padding(.horizontal, 24)
+                    .padding(.vertical, 12)
             }
             .buttonStyle(.borderedProminent)
+            .clipShape(Capsule())
+
+            Spacer()
         }
     }
 
@@ -134,12 +159,24 @@ struct KidsListView: View {
         List {
             Section {
                 HStack {
-                    VStack(alignment: .leading, spacing: 4) {
+                    VStack(alignment: .leading, spacing: 6) {
                         Text("Total Balance")
                             .font(.subheadline)
                             .foregroundStyle(.secondary)
                         Text(totalBalance, format: .currency(code: CurrencyManager.shared.currencyCode))
-                            .font(.title.bold())
+                            .font(.system(size: 36, weight: .bold, design: .rounded))
+
+                        HStack(spacing: 12) {
+                            Label("\(allKids.count) ledger\(allKids.count == 1 ? "" : "s")", systemImage: "book.closed.fill")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+
+                            if !sharedKids.isEmpty {
+                                Label("\(sharedKids.count) shared", systemImage: "person.2.fill")
+                                    .font(.caption)
+                                    .foregroundStyle(.blue)
+                            }
+                        }
                     }
                     Spacer()
                 }
@@ -148,7 +185,7 @@ struct KidsListView: View {
 
             // My Ledgers section (private kids)
             if !privateKids.isEmpty {
-                Section("My Ledgers") {
+                Section {
                     ForEach(privateKids) { kid in
                         NavigationLink(value: kid) {
                             KidRowView(kid: kid, shareStatus: persistenceController.shareStatus(for: kid))
@@ -172,12 +209,15 @@ struct KidsListView: View {
                             }
                         }
                     }
+                } header: {
+                    Label("My Ledgers", systemImage: "book.closed.fill")
+                        .textCase(nil)
                 }
             }
 
             // Shared with Me section
             if !sharedKids.isEmpty {
-                Section("Shared with Me") {
+                Section {
                     ForEach(sharedKids) { kid in
                         NavigationLink(value: kid) {
                             KidRowView(kid: kid, shareStatus: persistenceController.shareStatus(for: kid))
@@ -191,21 +231,33 @@ struct KidsListView: View {
                             .tint(.orange)
                         }
                     }
+                } header: {
+                    Label("Shared with Me", systemImage: "person.2.fill")
+                        .textCase(nil)
                 }
             }
 
-            // All Transactions section (no header)
+            // Recent Activity section
             Section {
                 if allTransactions.isEmpty {
-                    Text("No transactions yet")
-                        .foregroundStyle(.secondary)
-                        .frame(maxWidth: .infinity, alignment: .center)
-                        .padding(.vertical, 20)
+                    VStack(spacing: 8) {
+                        Image(systemName: "clock")
+                            .font(.title2)
+                            .foregroundStyle(.secondary)
+                        Text("No transactions yet")
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                    }
+                    .frame(maxWidth: .infinity, alignment: .center)
+                    .padding(.vertical, 24)
                 } else {
                     ForEach(allTransactions, id: \.id) { transaction in
                         TransactionRowWithKid(transaction: transaction)
                     }
                 }
+            } header: {
+                Label("Recent Activity", systemImage: "clock.fill")
+                    .textCase(nil)
             }
         }
         .navigationDestination(for: Kid.self) { kid in
