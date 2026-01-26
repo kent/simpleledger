@@ -2,7 +2,7 @@ import SwiftUI
 import CloudKit
 
 @main
-struct SimpleLedgerApp: App {
+struct MunniesApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
 
     let persistenceController = PersistenceController.shared

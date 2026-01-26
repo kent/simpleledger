@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		A10000010000000000000001 /* SimpleLedgerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000001 /* SimpleLedgerApp.swift */; };
+		A10000010000000000000001 /* MunniesApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000001 /* MunniesApp.swift */; };
 		A10000010000000000000002 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000002 /* AppDelegate.swift */; };
 		A10000010000000000000003 /* PersistenceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000003 /* PersistenceController.swift */; };
 		A10000010000000000000004 /* CloudKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000004 /* CloudKitManager.swift */; };
@@ -20,13 +20,13 @@
 		A10000010000000000000011 /* TransactionListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000011 /* TransactionListView.swift */; };
 		A10000010000000000000012 /* TransactionRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000012 /* TransactionRowView.swift */; };
 		A10000010000000000000013 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000013 /* SettingsView.swift */; };
-		A10000010000000000000014 /* SimpleLedger.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000014 /* SimpleLedger.xcdatamodeld */; };
+		A10000010000000000000014 /* Munnies.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000014 /* Munnies.xcdatamodeld */; };
 		A10000010000000000000015 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000018 /* Assets.xcassets */; };
 		A10000010000000000000016 /* ConfettiView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000019 /* ConfettiView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		A20000010000000000000001 /* SimpleLedgerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleLedgerApp.swift; sourceTree = "<group>"; };
+		A20000010000000000000001 /* MunniesApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MunniesApp.swift; sourceTree = "<group>"; };
 		A20000010000000000000002 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A20000010000000000000003 /* PersistenceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceController.swift; sourceTree = "<group>"; };
 		A20000010000000000000004 /* CloudKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitManager.swift; sourceTree = "<group>"; };
@@ -39,12 +39,12 @@
 		A20000010000000000000011 /* TransactionListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionListView.swift; sourceTree = "<group>"; };
 		A20000010000000000000012 /* TransactionRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionRowView.swift; sourceTree = "<group>"; };
 		A20000010000000000000013 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
-		A20000010000000000000014 /* SimpleLedger.xcdatamodeld */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodeld; path = SimpleLedger.xcdatamodeld; sourceTree = "<group>"; };
-		A20000010000000000000015 /* SimpleLedger.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SimpleLedger.entitlements; sourceTree = "<group>"; };
+		A20000010000000000000014 /* Munnies.xcdatamodeld */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodeld; path = Munnies.xcdatamodeld; sourceTree = "<group>"; };
+		A20000010000000000000015 /* Munnies.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Munnies.entitlements; sourceTree = "<group>"; };
 		A20000010000000000000016 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A20000010000000000000018 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A20000010000000000000019 /* ConfettiView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfettiView.swift; sourceTree = "<group>"; };
-		A30000010000000000000001 /* SimpleLedger.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SimpleLedger.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A30000010000000000000001 /* Munnies.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Munnies.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -61,12 +61,12 @@
 		A50000010000000000000001 = {
 			isa = PBXGroup;
 			children = (
-				A50000010000000000000002 /* SimpleLedger */,
+				A50000010000000000000002 /* Munnies */,
 				A50000010000000000000003 /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		A50000010000000000000002 /* SimpleLedger */ = {
+		A50000010000000000000002 /* Munnies */ = {
 			isa = PBXGroup;
 			children = (
 				A50000010000000000000004 /* App */,
@@ -74,13 +74,13 @@
 				A50000010000000000000006 /* Features */,
 				A50000010000000000000007 /* Resources */,
 			);
-			path = SimpleLedger;
+			path = Munnies;
 			sourceTree = "<group>";
 		};
 		A50000010000000000000003 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				A30000010000000000000001 /* SimpleLedger.app */,
+				A30000010000000000000001 /* Munnies.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -88,7 +88,7 @@
 		A50000010000000000000004 /* App */ = {
 			isa = PBXGroup;
 			children = (
-				A20000010000000000000001 /* SimpleLedgerApp.swift */,
+				A20000010000000000000001 /* MunniesApp.swift */,
 				A20000010000000000000002 /* AppDelegate.swift */,
 			);
 			path = App;
@@ -117,7 +117,7 @@
 			isa = PBXGroup;
 			children = (
 				A20000010000000000000018 /* Assets.xcassets */,
-				A20000010000000000000015 /* SimpleLedger.entitlements */,
+				A20000010000000000000015 /* Munnies.entitlements */,
 				A20000010000000000000016 /* Info.plist */,
 			);
 			path = Resources;
@@ -128,7 +128,7 @@
 			children = (
 				A20000010000000000000003 /* PersistenceController.swift */,
 				A20000010000000000000004 /* CloudKitManager.swift */,
-				A20000010000000000000014 /* SimpleLedger.xcdatamodeld */,
+				A20000010000000000000014 /* Munnies.xcdatamodeld */,
 			);
 			path = Persistence;
 			sourceTree = "<group>";
@@ -174,9 +174,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		A60000010000000000000001 /* SimpleLedger */ = {
+		A60000010000000000000001 /* Munnies */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = A70000010000000000000001 /* Build configuration list for PBXNativeTarget "SimpleLedger" */;
+			buildConfigurationList = A70000010000000000000001 /* Build configuration list for PBXNativeTarget "Munnies" */;
 			buildPhases = (
 				A80000010000000000000001 /* Sources */,
 				A40000010000000000000001 /* Frameworks */,
@@ -186,9 +186,9 @@
 			);
 			dependencies = (
 			);
-			name = SimpleLedger;
-			productName = SimpleLedger;
-			productReference = A30000010000000000000001 /* SimpleLedger.app */;
+			name = Munnies;
+			productName = Munnies;
+			productReference = A30000010000000000000001 /* Munnies.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -206,7 +206,7 @@
 					};
 				};
 			};
-			buildConfigurationList = B10000010000000000000001 /* Build configuration list for PBXProject "SimpleLedger" */;
+			buildConfigurationList = B10000010000000000000001 /* Build configuration list for PBXProject "Munnies" */;
 			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -219,7 +219,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				A60000010000000000000001 /* SimpleLedger */,
+				A60000010000000000000001 /* Munnies */,
 			);
 		};
 /* End PBXProject section */
@@ -240,7 +240,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A10000010000000000000001 /* SimpleLedgerApp.swift in Sources */,
+				A10000010000000000000001 /* MunniesApp.swift in Sources */,
 				A10000010000000000000002 /* AppDelegate.swift in Sources */,
 				A10000010000000000000003 /* PersistenceController.swift in Sources */,
 				A10000010000000000000004 /* CloudKitManager.swift in Sources */,
@@ -253,7 +253,7 @@
 				A10000010000000000000011 /* TransactionListView.swift in Sources */,
 				A10000010000000000000012 /* TransactionRowView.swift in Sources */,
 				A10000010000000000000013 /* SettingsView.swift in Sources */,
-				A10000010000000000000014 /* SimpleLedger.xcdatamodeld in Sources */,
+				A10000010000000000000014 /* Munnies.xcdatamodeld in Sources */,
 				A10000010000000000000016 /* ConfettiView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -385,13 +385,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = SimpleLedger/Resources/SimpleLedger.entitlements;
+				CODE_SIGN_ENTITLEMENTS = Munnies/Resources/Munnies.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = SimpleLedger/Resources/Info.plist;
+				INFOPLIST_FILE = Munnies/Resources/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Munnies;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -416,13 +416,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = SimpleLedger/Resources/SimpleLedger.entitlements;
+				CODE_SIGN_ENTITLEMENTS = Munnies/Resources/Munnies.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = SimpleLedger/Resources/Info.plist;
+				INFOPLIST_FILE = Munnies/Resources/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Munnies;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -445,7 +445,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		A70000010000000000000001 /* Build configuration list for PBXNativeTarget "SimpleLedger" */ = {
+		A70000010000000000000001 /* Build configuration list for PBXNativeTarget "Munnies" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				C20000010000000000000001 /* Debug */,
@@ -454,7 +454,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		B10000010000000000000001 /* Build configuration list for PBXProject "SimpleLedger" */ = {
+		B10000010000000000000001 /* Build configuration list for PBXProject "Munnies" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				C10000010000000000000001 /* Debug */,
@@ -466,20 +466,20 @@
 /* End XCConfigurationList section */
 
 /* Begin XCVersionGroup section */
-		A20000010000000000000014 /* SimpleLedger.xcdatamodeld */ = {
+		A20000010000000000000014 /* Munnies.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
-				A20000010000000000000017 /* SimpleLedger.xcdatamodel */,
+				A20000010000000000000017 /* Munnies.xcdatamodel */,
 			);
-			currentVersion = A20000010000000000000017 /* SimpleLedger.xcdatamodel */;
-			path = SimpleLedger.xcdatamodeld;
+			currentVersion = A20000010000000000000017 /* Munnies.xcdatamodel */;
+			path = Munnies.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
 		};
-		A20000010000000000000017 /* SimpleLedger.xcdatamodel */ = {
+		A20000010000000000000017 /* Munnies.xcdatamodel */ = {
 			isa = PBXFileReference;
 			lastKnownFileType = wrapper.xcdatamodel;
-			path = SimpleLedger.xcdatamodel;
+			path = Munnies.xcdatamodel;
 			sourceTree = "<group>";
 		};
 /* End XCVersionGroup section */

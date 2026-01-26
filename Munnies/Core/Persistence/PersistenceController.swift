@@ -1,6 +1,7 @@
 import CoreData
 import CloudKit
 
+@MainActor
 final class PersistenceController: ObservableObject {
     static let shared = PersistenceController()
 
@@ -92,7 +93,7 @@ final class PersistenceController: ObservableObject {
     }
 
     init(inMemory: Bool = false) {
-        container = NSPersistentCloudKitContainer(name: "SimpleLedger")
+        container = NSPersistentCloudKitContainer(name: "Munnies")
 
         if inMemory {
             container.persistentStoreDescriptions.first!.url = URL(fileURLWithPath: "/dev/null")
@@ -172,7 +173,7 @@ final class PersistenceController: ObservableObject {
         container.persistentStoreDescriptions.append(sharedDescription)
     }
 
-    @objc private func storeRemoteChange(_ notification: Notification) {
+    @objc nonisolated private func storeRemoteChange(_ notification: Notification) {
         // Process remote changes on a background context
         let context = container.newBackgroundContext()
         context.perform {
