@@ -23,6 +23,8 @@
 		A10000010000000000000014 /* Munnies.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000014 /* Munnies.xcdatamodeld */; };
 		A10000010000000000000015 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000018 /* Assets.xcassets */; };
 		A10000010000000000000016 /* ConfettiView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000019 /* ConfettiView.swift */; };
+		A10000010000000000000017 /* OnboardingPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000020 /* OnboardingPageView.swift */; };
+		A10000010000000000000018 /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000021 /* WelcomeView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -44,6 +46,8 @@
 		A20000010000000000000016 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A20000010000000000000018 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A20000010000000000000019 /* ConfettiView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfettiView.swift; sourceTree = "<group>"; };
+		A20000010000000000000020 /* OnboardingPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingPageView.swift; sourceTree = "<group>"; };
+		A20000010000000000000021 /* WelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeView.swift; sourceTree = "<group>"; };
 		A30000010000000000000001 /* Munnies.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Munnies.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -107,10 +111,20 @@
 			isa = PBXGroup;
 			children = (
 				A50000010000000000000010 /* Kids */,
+				A50000010000000000000013 /* Onboarding */,
 				A50000010000000000000011 /* Transactions */,
 				A50000010000000000000012 /* Settings */,
 			);
 			path = Features;
+			sourceTree = "<group>";
+		};
+		A50000010000000000000013 /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+				A20000010000000000000020 /* OnboardingPageView.swift */,
+				A20000010000000000000021 /* WelcomeView.swift */,
+			);
+			path = Onboarding;
 			sourceTree = "<group>";
 		};
 		A50000010000000000000007 /* Resources */ = {
@@ -255,6 +269,8 @@
 				A10000010000000000000013 /* SettingsView.swift in Sources */,
 				A10000010000000000000014 /* Munnies.xcdatamodeld in Sources */,
 				A10000010000000000000016 /* ConfettiView.swift in Sources */,
+				A10000010000000000000017 /* OnboardingPageView.swift in Sources */,
+				A10000010000000000000018 /* WelcomeView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
