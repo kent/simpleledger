@@ -33,7 +33,7 @@ struct KidRowView: View {
                 }
 
                 if let lastTransaction = kid.sortedTransactions.first {
-                    Text(lastTransaction.createdAt ?? Date(), style: .relative)
+                    Text(relativeTimeString(from: lastTransaction.createdAt ?? Date()))
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
                 } else {
@@ -52,6 +52,14 @@ struct KidRowView: View {
         }
         .padding(.vertical, 8)
     }
+}
+
+// MARK: - Relative Time Helper
+
+private func relativeTimeString(from date: Date) -> String {
+    let formatter = RelativeDateTimeFormatter()
+    formatter.unitsStyle = .abbreviated
+    return formatter.localizedString(for: date, relativeTo: Date())
 }
 
 // MARK: - Color Extension

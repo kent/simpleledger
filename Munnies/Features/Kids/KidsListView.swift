@@ -338,7 +338,7 @@ struct KidsListView: View {
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
                         }
-                        Text(transaction.createdAt ?? Date(), style: .relative)
+                        Text(relativeTimeString(from: transaction.createdAt ?? Date()))
                             .font(.caption)
                             .foregroundStyle(.secondary)
                     }
@@ -378,6 +378,14 @@ struct KidsListView: View {
             }
         }
     }
+}
+
+// MARK: - Relative Time Helper
+
+private func relativeTimeString(from date: Date) -> String {
+    let formatter = RelativeDateTimeFormatter()
+    formatter.unitsStyle = .abbreviated
+    return formatter.localizedString(for: date, relativeTo: Date())
 }
 
 // MARK: - Notification Name Extension
