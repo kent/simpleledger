@@ -3,53 +3,58 @@ import { Container } from '@/components/Container'
 const faqs = [
   [
     {
-      question: 'Wait, it\'s really free?',
+      question: 'Is there a subscription?',
       answer:
-        'Yep! 100% free. No sneaky subscriptions, no in-app purchases, no "premium" tier. We made this for our own families and wanted to share it with everyone.',
+        'No. Munnies is a one-time purchase for $1.99 on the App Store. There is no monthly plan, premium tier, or recurring fee.',
     },
     {
-      question: 'Will it sync between me and my partner?',
+      question: 'Can multiple family members use the same accounts?',
       answer:
-        'You bet! Share any ledger with family members. You can both add money, track spending, and see the same balances. No more "I thought YOU gave her the allowance" arguments.',
+        'Yes. You can share accounts through iCloud so parents or other invited family members see the same balances and transaction history.',
     },
     {
-      question: 'What about our privacy?',
+      question: 'Do you collect our data?',
       answer:
-        'Your data never leaves your iCloud. We literally can\'t see it even if we wanted to. Privacy is baked in, not bolted on.',
+        'No. Munnies stores your data on device and in your iCloud account. There is no Munnies backend collecting family balances or transaction history.',
+    },
+    {
+      question: 'What can I track in Munnies?',
+      answer:
+        'Allowance, chores, gifts, spending, and manual balance corrections. Each child gets their own account so activity stays organized.',
     },
   ],
   [
     {
       question: 'How many kids can I add?',
       answer:
-        'As many as you need! Got a basketball team\'s worth of kids? No problem. Each one gets their own ledger.',
+        'As many as your family needs. Munnies is not limited to one or two child accounts.',
     },
     {
-      question: 'Can Grandma use it too?',
+      question: 'Can I track spending too?',
       answer:
-        'Absolutely! Share ledgers with grandparents, aunts, uncles, or anyone else who spoils... er, helps with your kids\' finances.',
+        'Yes. You can add money, record spending, and include notes so the full account history makes sense later.',
     },
     {
-      question: 'What if my kid spends money?',
+      question: 'Does it work on iPad?',
       answer:
-        'Just hit the "Spend" mode and record it. You can add notes like "candy store raid" or "mystery purchase" so you remember later.',
+        'Yes. Munnies is built for both iPhone and iPad, and iCloud keeps your data aligned between them.',
     },
   ],
   [
     {
-      question: 'Does it work on iPad too?',
+      question: 'Do I need to create a separate Munnies login?',
       answer:
-        'Yes! Munnies syncs across all your Apple devices via iCloud. Update on your phone, check on your iPad, or vice versa.',
+        'No. There is no separate Munnies account system. iCloud handles sync and sharing if you want those features.',
     },
     {
-      question: 'Can I add notes to transactions?',
+      question: 'What happens if I change devices?',
       answer:
-        'For sure! Add notes like "Birthday $$ from Uncle Bob" or "Spent on something probably Roblox-related." The history is all there.',
+        'Your data can sync through iCloud, so moving between an iPhone and iPad is straightforward as long as you use the same Apple account.',
     },
     {
-      question: 'What if I need help?',
+      question: 'How do I get help?',
       answer:
-        'Drop us a line at support@munnies.app! We\'re real humans (and parents) who actually read every message.',
+        'Send a note to kent.fenwick@gmail.com and include your device model and iOS version if you are reporting a problem.',
     },
   ],
 ]
@@ -67,17 +72,17 @@ export function Faqs() {
             id="faqs-title"
             className="text-3xl font-medium tracking-tight text-gray-900"
           >
-            Questions? We got answers. 💬
+            Frequently asked questions
           </h2>
           <p className="mt-2 text-lg text-gray-600">
-            Still curious?{' '}
+            If you have anything else you want to ask,{' '}
             <a
-              href="mailto:support@munnies.app"
-              className="text-emerald-600 underline hover:text-emerald-500"
+              href="mailto:kent.fenwick@gmail.com"
+              className="text-orange-600 underline"
             >
-              Shoot us an email
+              reach out to us
             </a>
-            . We promise we&apos;re friendly.
+            .
           </p>
         </div>
         <ul

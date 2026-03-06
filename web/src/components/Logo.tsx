@@ -1,38 +1,45 @@
+import Image from 'next/image'
 import clsx from 'clsx'
 
 export function Logomark({
   className,
-  ...props
-}: React.ComponentPropsWithoutRef<'svg'>) {
+  alt = 'Munnies logo',
+  priority = false,
+}: {
+  className?: string
+  alt?: string
+  priority?: boolean
+}) {
   return (
-    <svg
-      viewBox="0 0 40 40"
-      aria-hidden="true"
-      className={clsx('h-10 w-10', className)}
-      {...props}
-    >
-      <circle cx="20" cy="20" r="20" className="fill-emerald-500" />
-      <text
-        x="20"
-        y="28"
-        textAnchor="middle"
-        className="fill-white text-xl font-bold"
-        style={{ fontSize: '24px' }}
-      >
-        $
-      </text>
-    </svg>
+    <Image
+      src="/munnies-mark.png"
+      alt={alt}
+      width={40}
+      height={40}
+      priority={priority}
+      className={clsx('h-10 w-10 rounded-xl', className)}
+    />
   )
 }
 
 export function Logo({
   className,
-  ...props
-}: React.ComponentPropsWithoutRef<'div'>) {
+  textClassName,
+}: {
+  className?: string
+  textClassName?: string
+}) {
   return (
-    <div className={clsx('flex items-center gap-2', className)} {...props}>
-      <Logomark />
-      <span className="text-xl font-bold text-gray-900">Munnies</span>
-    </div>
+    <span className={clsx('inline-flex items-center gap-3', className)}>
+      <Logomark priority />
+      <span
+        className={clsx(
+          'text-2xl font-semibold tracking-tight text-gray-900',
+          textClassName,
+        )}
+      >
+        Munnies
+      </span>
+    </span>
   )
 }

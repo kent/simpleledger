@@ -12,20 +12,16 @@ export function CallToAction() {
         <CircleBackground color="#fff" className="animate-spin-slower" />
       </div>
       <Container className="relative">
-        <div className="mx-auto max-w-lg sm:text-center">
-          <div className="mb-6 text-6xl">🎁</div>
+        <div className="mx-auto max-w-md sm:text-center">
           <h2 className="text-3xl font-medium tracking-tight text-white sm:text-4xl">
-            Your kids&apos; financial future starts with one tap.
+            Put family money tracking on autopilot
           </h2>
           <p className="mt-4 text-lg text-gray-300">
-            Download Munnies and join 10,000+ families who are teaching their kids
-            about money the easy way. Did we mention it&apos;s free?
+            Give each child a clear account, add allowance in seconds, and keep
+            everyone in sync across iPhone and iPad with iCloud sharing.
           </p>
-          <div className="mt-8 flex flex-col items-center gap-4">
+          <div className="mt-8 flex justify-center">
             <AppStoreLink color="white" />
-            <p className="text-sm text-gray-400">
-              Free forever • No account needed • Takes 30 seconds
-            </p>
           </div>
         </div>
       </Container>

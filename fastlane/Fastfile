@@ -1,0 +1,286 @@
+fastlane_version "2.232.2"
+default_platform(:ios)
+
+require "json"
+require "rbconfig"
+require_relative "deliver_patches"
+
+ROOT_DIR = File.expand_path("..", __dir__)
+APP_SCHEME = "Munnies"
+PROJECT_PATH = File.join(ROOT_DIR, "Munnies.xcodeproj")
+APP_IDENTIFIER = "com.ewakened.munnies"
+DEFAULT_FASTLANE_USER = "kent.fenwick@gmail.com"
+DEFAULT_ITC_TEAM_ID = "150077"
+DEFAULT_ITC_TEAM_NAME = "Kent Fenwick"
+DEFAULT_PORTAL_TEAM_ID = "PS5W7BFTQ2"
+BUILD_OUTPUT_DIRECTORY = File.join(ROOT_DIR, "build", "app-store")
+IPA_OUTPUT_PATH = File.join(BUILD_OUTPUT_DIRECTORY, "Munnies.ipa")
+ARCHIVE_PATH = File.join(ROOT_DIR, "build", "Munnies.xcarchive")
+EXPORT_OPTIONS_PATH = File.join(ROOT_DIR, "build", "ExportOptions.plist")
+METADATA_PATH = File.join(ROOT_DIR, "fastlane", "metadata")
+SCREENSHOTS_PATH = File.join(ROOT_DIR, "app-store-screenshots")
+STATUS_BUILD_LIMIT = 10
+
+def env_value(*keys)
+  keys.each do |key|
+    value = ENV[key]
+    return value unless value.to_s.strip.empty?
+  end
+
+  nil
+end
+
+def flag_enabled?(value, default: false)
+  return default if value.nil?
+  return value if value == true || value == false
+
+  %w[1 true yes y on].include?(value.to_s.strip.downcase)
+end
+
+def api_key_configuration
+  base64_key_content = env_value("ASC_KEY_CONTENT_BASE64")
+  raw_key_content = env_value("ASC_KEY_CONTENT", "APP_STORE_CONNECT_API_KEY_KEY")
+
+  {
+    key_id: env_value("ASC_KEY_ID", "APP_STORE_CONNECT_API_KEY_KEY_ID"),
+    issuer_id: env_value("ASC_ISSUER_ID", "APP_STORE_CONNECT_API_KEY_ISSUER_ID"),
+    key_filepath: env_value("ASC_KEY_FILE", "APP_STORE_CONNECT_API_KEY_KEY_FILEPATH"),
+    key_content: base64_key_content || raw_key_content,
+    is_key_content_base64: !base64_key_content.nil? || flag_enabled?(env_value("APP_STORE_CONNECT_API_KEY_IS_KEY_CONTENT_BASE64"), default: false)
+  }
+end
+
+def api_key_auth_requested?
+  config = api_key_configuration
+  [config[:key_id], config[:issuer_id], config[:key_filepath], config[:key_content]].any? { |value| !value.to_s.strip.empty? }
+end
+
+def using_api_key_auth?
+  config = api_key_configuration
+  !config[:key_id].to_s.strip.empty? && (!config[:key_filepath].to_s.strip.empty? || !config[:key_content].to_s.strip.empty?)
+end
+
+def parse_groups(value)
+  value.to_s.split(",").map(&:strip).reject(&:empty?)
+end
+
+platform :ios do
+  private_lane :app_store_auth do
+    if api_key_auth_requested? && !using_api_key_auth?
+      UI.user_error!("Incomplete App Store Connect API key configuration. Set ASC_KEY_ID and either ASC_KEY_FILE or ASC_KEY_CONTENT_BASE64.")
+    end
+
+    if using_api_key_auth?
+      config = api_key_configuration
+      key_options = {
+        key_id: config[:key_id],
+        issuer_id: config[:issuer_id],
+        duration: 1200,
+        in_house: false,
+        set_spaceship_token: true
+      }
+
+      if !config[:key_filepath].to_s.strip.empty?
+        key_options[:key_filepath] = File.expand_path(config[:key_filepath])
+      else
+        key_options[:key_content] = config[:key_content]
+        key_options[:is_key_content_base64] = config[:is_key_content_base64]
+      end
+
+      { api_key: app_store_connect_api_key(**key_options) }
+    else
+      {}
+    end
+  end
+
+  private_lane :spaceship_client do
+    if using_api_key_auth?
+      app_store_auth
+      Spaceship::ConnectAPI
+    else
+      Spaceship::ConnectAPI.login(
+        env_value("FASTLANE_USER") || CredentialsManager::AppfileConfig.try_fetch_value(:apple_id) || DEFAULT_FASTLANE_USER,
+        nil,
+        use_portal: false,
+        use_tunes: true,
+        portal_team_id: env_value("FASTLANE_TEAM_ID") || CredentialsManager::AppfileConfig.try_fetch_value(:team_id) || DEFAULT_PORTAL_TEAM_ID,
+        tunes_team_id: env_value("FASTLANE_ITC_TEAM_ID") || CredentialsManager::AppfileConfig.try_fetch_value(:itc_team_id) || DEFAULT_ITC_TEAM_ID,
+        team_name: env_value("FASTLANE_ITC_TEAM_NAME") || CredentialsManager::AppfileConfig.try_fetch_value(:itc_team_name) || DEFAULT_ITC_TEAM_NAME,
+        skip_select_team: false
+      )
+    end
+  end
+
+  private_lane :release_notes do |options|
+    notes = options[:changelog] || env_value("TESTFLIGHT_CHANGELOG")
+    if !notes.to_s.strip.empty?
+      notes
+    else
+      notes_path = File.join(ROOT_DIR, "fastlane", "metadata", "en-US", "release_notes.txt")
+      if File.exist?(notes_path)
+        contents = File.read(notes_path).strip
+        contents.empty? ? nil : contents
+      else
+        nil
+      end
+    end
+  end
+
+  desc "Validate the local App Store automation toolchain"
+  lane :doctor do
+    UI.message("Ruby #{RUBY_VERSION} at #{RbConfig.ruby}")
+    UI.message("fastlane #{Fastlane::VERSION}")
+    UI.user_error!("Missing #{PROJECT_PATH}") unless File.exist?(PROJECT_PATH)
+    UI.user_error!("Missing #{EXPORT_OPTIONS_PATH}") unless File.exist?(EXPORT_OPTIONS_PATH)
+    UI.user_error!("Missing #{METADATA_PATH}") unless Dir.exist?(METADATA_PATH)
+    UI.user_error!("Missing #{SCREENSHOTS_PATH}") unless Dir.exist?(SCREENSHOTS_PATH)
+
+    sh("xcodebuild", "-list", "-project", PROJECT_PATH)
+
+    if using_api_key_auth?
+      app_store_auth
+      UI.success("App Store Connect API key auth is configured.")
+    else
+      UI.important("No App Store Connect API key detected. Commands will fall back to Apple ID/session auth.")
+    end
+  end
+
+  desc "Print a JSON snapshot of the App Store Connect app, groups, and recent builds"
+  lane :status do
+    client = spaceship_client
+    app = Spaceship::ConnectAPI::App.find(APP_IDENTIFIER, client: client)
+    UI.user_error!("Could not find #{APP_IDENTIFIER} in App Store Connect.") if app.nil?
+
+    payload = {
+      app: {
+        id: app.id,
+        name: app.name,
+        bundle_id: app.bundle_id
+      },
+      beta_groups: app.get_beta_groups(client: client, sort: "name").map do |group|
+        {
+          name: group.name,
+          internal: group.is_internal_group,
+          access_to_all_builds: group.has_access_to_all_builds
+        }
+      end,
+      recent_builds: app.get_builds(
+        client: client,
+        includes: Spaceship::ConnectAPI::Build::ESSENTIAL_INCLUDES,
+        sort: "-uploadedDate",
+        limit: STATUS_BUILD_LIMIT
+      ).map do |build|
+        beta_detail = build.build_beta_detail
+        {
+          version: build.app_version,
+          build_number: build.version,
+          processing_state: build.processing_state,
+          uploaded_date: build.uploaded_date,
+          ready_for_internal_testing: build.ready_for_internal_testing?,
+          internal_build_state: beta_detail&.internal_build_state,
+          external_build_state: beta_detail&.external_build_state
+        }
+      end
+    }
+
+    puts(JSON.pretty_generate(payload))
+  end
+
+  desc "Build a signed App Store archive and IPA"
+  lane :build_release do |options|
+    build_app(
+      project: PROJECT_PATH,
+      scheme: APP_SCHEME,
+      configuration: "Release",
+      clean: true,
+      archive_path: options[:archive_path] || ARCHIVE_PATH,
+      export_options: EXPORT_OPTIONS_PATH,
+      output_directory: options[:output_directory] || BUILD_OUTPUT_DIRECTORY,
+      output_name: options[:output_name] || File.basename(IPA_OUTPUT_PATH)
+    )
+  end
+
+  desc "Upload the latest IPA to internal TestFlight"
+  lane :beta do |options|
+    ipa_path = options[:ipa] || env_value("IPA_PATH") || IPA_OUTPUT_PATH
+    build_release(options) unless File.exist?(ipa_path)
+
+    upload_options = {
+      ipa: ipa_path,
+      app_identifier: APP_IDENTIFIER,
+      changelog: release_notes(options),
+      skip_waiting_for_build_processing: options[:skip_waiting_for_build_processing].nil? ? true : flag_enabled?(options[:skip_waiting_for_build_processing])
+    }.merge(app_store_auth)
+
+    groups = parse_groups(options[:groups] || env_value("TESTFLIGHT_GROUPS"))
+    upload_options[:groups] = groups unless groups.empty?
+
+    upload_to_testflight(**upload_options)
+  end
+
+  desc "Build and upload a TestFlight build"
+  lane :prepare_beta do |options|
+    doctor
+    build_release(options)
+    beta(options)
+  end
+
+  desc "Upload App Store metadata and screenshots"
+  lane :metadata do |options|
+    deliver_options = {
+      app_identifier: APP_IDENTIFIER,
+      app_version: options[:app_version] || get_version_number(xcodeproj: PROJECT_PATH, target: APP_SCHEME),
+      metadata_path: METADATA_PATH,
+      screenshots_path: SCREENSHOTS_PATH,
+      overwrite_screenshots: options[:overwrite_screenshots].nil? ? true : flag_enabled?(options[:overwrite_screenshots]),
+      force: true,
+      submit_for_review: false,
+      skip_binary_upload: true,
+      skip_screenshots: flag_enabled?(options[:skip_screenshots]),
+      skip_metadata: flag_enabled?(options[:skip_metadata]),
+      run_precheck_before_submit: true,
+      precheck_include_in_app_purchases: false
+    }.merge(app_store_auth)
+
+    price_tier = options[:price_tier] || env_value("APP_STORE_PRICE_TIER")
+    deliver_options[:price_tier] = price_tier unless price_tier.to_s.strip.empty?
+
+    deliver(**deliver_options)
+  end
+
+  desc "Upload screenshots without touching listing copy"
+  lane :screenshots do |options|
+    metadata(options.merge(skip_metadata: true))
+  end
+
+  desc "Update the App Store price tier without touching metadata or screenshots"
+  lane :price do |options|
+    price_tier = options[:price_tier] || env_value("APP_STORE_PRICE_TIER")
+    UI.user_error!("Provide price_tier:2 or set APP_STORE_PRICE_TIER.") if price_tier.to_s.strip.empty?
+
+    deliver(
+      app_identifier: APP_IDENTIFIER,
+      price_tier: price_tier,
+      force: true,
+      submit_for_review: false,
+      skip_binary_upload: true,
+      skip_metadata: true,
+      skip_screenshots: true,
+      skip_app_version_update: true,
+      **app_store_auth
+    )
+  end
+
+  desc "Download current App Store Connect metadata and screenshots into the repo"
+  lane :download_metadata do |options|
+    deliver(
+      app_identifier: APP_IDENTIFIER,
+      metadata_path: METADATA_PATH,
+      screenshots_path: SCREENSHOTS_PATH,
+      download_metadata: true,
+      download_screenshots: options[:download_screenshots].nil? ? true : flag_enabled?(options[:download_screenshots]),
+      force: true,
+      **app_store_auth
+    )
+  end
+end

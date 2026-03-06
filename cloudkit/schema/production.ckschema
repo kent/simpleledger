@@ -1,0 +1,92 @@
+DEFINE SCHEMA
+
+    RECORD TYPE CD_AppSettings (
+        CD_currencyCode         STRING QUERYABLE SEARCHABLE SORTABLE,
+        CD_currencyCode_ckAsset ASSET,
+        CD_entityName           STRING QUERYABLE SEARCHABLE SORTABLE,
+        CD_id                   STRING QUERYABLE SEARCHABLE SORTABLE,
+        CD_moveReceipt          BYTES QUERYABLE SORTABLE,
+        CD_moveReceipt_ckAsset  ASSET,
+        "___createTime"         TIMESTAMP,
+        "___createdBy"          REFERENCE,
+        "___etag"               STRING,
+        "___modTime"            TIMESTAMP,
+        "___modifiedBy"         REFERENCE,
+        "___recordID"           REFERENCE,
+        GRANT WRITE TO "_creator",
+        GRANT CREATE TO "_icloud",
+        GRANT READ TO "_world"
+    );
+
+    RECORD TYPE CD_Kid (
+        CD_avatarEmoji         STRING QUERYABLE SEARCHABLE SORTABLE,
+        CD_avatarEmoji_ckAsset ASSET,
+        CD_colorHex            STRING QUERYABLE SEARCHABLE SORTABLE,
+        CD_colorHex_ckAsset    ASSET,
+        CD_createdAt           TIMESTAMP QUERYABLE SORTABLE,
+        CD_entityName          STRING QUERYABLE SEARCHABLE SORTABLE,
+        CD_id                  STRING QUERYABLE SEARCHABLE SORTABLE,
+        CD_moveReceipt         BYTES QUERYABLE SORTABLE,
+        CD_moveReceipt_ckAsset ASSET,
+        CD_name                STRING QUERYABLE SEARCHABLE SORTABLE,
+        CD_name_ckAsset        ASSET,
+        "___createTime"        TIMESTAMP,
+        "___createdBy"         REFERENCE,
+        "___etag"              STRING,
+        "___modTime"           TIMESTAMP,
+        "___modifiedBy"        REFERENCE,
+        "___recordID"          REFERENCE,
+        GRANT WRITE TO "_creator",
+        GRANT CREATE TO "_icloud",
+        GRANT READ TO "_world"
+    );
+
+    RECORD TYPE CD_Transaction (
+        CD_amount                DOUBLE QUERYABLE SORTABLE,
+        CD_createdAt             TIMESTAMP QUERYABLE SORTABLE,
+        CD_createdByName         STRING QUERYABLE SEARCHABLE SORTABLE,
+        CD_createdByName_ckAsset ASSET,
+        CD_entityName            STRING QUERYABLE SEARCHABLE SORTABLE,
+        CD_id                    STRING QUERYABLE SEARCHABLE SORTABLE,
+        CD_kid                   STRING QUERYABLE SEARCHABLE SORTABLE,
+        CD_moveReceipt           BYTES QUERYABLE SORTABLE,
+        CD_moveReceipt_ckAsset   ASSET,
+        CD_note                  STRING QUERYABLE SEARCHABLE SORTABLE,
+        CD_note_ckAsset          ASSET,
+        "___createTime"          TIMESTAMP,
+        "___createdBy"           REFERENCE,
+        "___etag"                STRING,
+        "___modTime"             TIMESTAMP,
+        "___modifiedBy"          REFERENCE,
+        "___recordID"            REFERENCE,
+        GRANT WRITE TO "_creator",
+        GRANT CREATE TO "_icloud",
+        GRANT READ TO "_world"
+    );
+
+    RECORD TYPE Users (
+        "___createTime" TIMESTAMP,
+        "___createdBy"  REFERENCE,
+        "___etag"       STRING,
+        "___modTime"    TIMESTAMP,
+        "___modifiedBy" REFERENCE,
+        "___recordID"   REFERENCE,
+        roles           LIST<INT64>,
+        GRANT WRITE TO "_creator",
+        GRANT READ TO "_world"
+    );
+
+    RECORD TYPE "cloudkit.share" (
+        "___createTime"               TIMESTAMP,
+        "___createdBy"                REFERENCE,
+        "___etag"                     STRING,
+        "___modTime"                  TIMESTAMP,
+        "___modifiedBy"               REFERENCE,
+        "___recordID"                 REFERENCE,
+        "cloudkit.thumbnailImageData" BYTES,
+        "cloudkit.title"              STRING,
+        "cloudkit.type"               STRING,
+        GRANT WRITE TO "_creator",
+        GRANT CREATE TO "_icloud",
+        GRANT READ TO "_world"
+    );

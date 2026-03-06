@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+
+SERVICE_NAME="${SERVICE_NAME:-munnies-web}"
+GCP_PROJECT="${GCP_PROJECT:-munnies-489414}"
+GCP_REGION="${GCP_REGION:-us-central1}"
+SOURCE_DIR="${SOURCE_DIR:-$ROOT_DIR/web}"
+CDN_URL_MAP="${CDN_URL_MAP:-munnies-web-map}"
+INVALIDATE_CDN="${INVALIDATE_CDN:-1}"
+
+gcloud run deploy "$SERVICE_NAME" \
+  --source "$SOURCE_DIR" \
+  --region "$GCP_REGION" \
+  --project "$GCP_PROJECT" \
+  --allow-unauthenticated \
+  "$@"
+
+if [[ "$INVALIDATE_CDN" == "1" ]]; then
+  gcloud compute url-maps invalidate-cdn-cache "$CDN_URL_MAP" \
+    --path '/*' \
+    --project "$GCP_PROJECT" \
+    --async
+fi

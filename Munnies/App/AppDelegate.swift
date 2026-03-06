@@ -78,11 +78,13 @@ class SceneDelegate: NSObject, UIWindowSceneDelegate {
         let storesReady = await persistenceController.waitForStoresLoaded(timeout: 15.0)
 
         guard storesReady else {
-            print("Stores failed to load in time for share acceptance")
+            let message = persistenceController.storeLoadError?.localizedDescription
+                ?? "Stores not ready. Please try again."
+            print("Stores failed to load in time for share acceptance: \(message)")
             NotificationCenter.default.post(
                 name: .shareAcceptanceFailed,
                 object: nil,
-                userInfo: ["error": "Stores not ready. Please try again."]
+                userInfo: ["error": message]
             )
             return
         }
@@ -110,7 +112,7 @@ class SceneDelegate: NSObject, UIWindowSceneDelegate {
             NotificationCenter.default.post(
                 name: .shareAcceptanceFailed,
                 object: nil,
-                userInfo: ["error": error.localizedDescription]
+                userInfo: ["error": CloudKitErrorFormatter.message(for: error)]
             )
         }
     }

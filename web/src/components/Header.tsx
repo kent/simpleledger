@@ -11,6 +11,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 
 import { Button } from '@/components/Button'
 import { Container } from '@/components/Container'
+import { appStoreUrl } from '@/lib/site'
 import { Logo } from '@/components/Logo'
 import { NavLinks } from '@/components/NavLinks'
 
@@ -56,6 +57,14 @@ function MobileNavLink(
 }
 
 export function Header() {
+  const links = [
+    ['Features', '/#features'],
+    ['Screens', '/#screens'],
+    ['iCloud', '/#sync'],
+    ['Pricing', '/#pricing'],
+    ['FAQs', '/#faqs'],
+  ]
+
   return (
     <header>
       <nav>
@@ -108,20 +117,18 @@ export function Header() {
                           className="absolute inset-x-0 top-0 z-0 origin-top rounded-b-2xl bg-gray-50 px-6 pt-32 pb-6 shadow-2xl shadow-gray-900/20"
                         >
                           <div className="space-y-4">
-                            <MobileNavLink href="/#features">
-                              Features
-                            </MobileNavLink>
-                            <MobileNavLink href="/#how-it-works">
-                              How It Works
-                            </MobileNavLink>
-                            <MobileNavLink href="/#testimonials">
-                              Testimonials
-                            </MobileNavLink>
-                            <MobileNavLink href="/#faqs">FAQs</MobileNavLink>
+                            {links.map(([label, href]) => (
+                              <MobileNavLink key={href} href={href}>
+                                {label}
+                              </MobileNavLink>
+                            ))}
                           </div>
                           <div className="mt-8 flex flex-col gap-4">
-                            <Button href="https://apps.apple.com/app/munnies" color="emerald">
-                              Download Free
+                            <Button
+                              href={appStoreUrl}
+                              color="orange"
+                            >
+                              Buy for $1.99
                             </Button>
                           </div>
                         </PopoverPanel>
@@ -132,8 +139,11 @@ export function Header() {
               )}
             </Popover>
             <div className="flex items-center gap-6 max-lg:hidden">
-              <Button href="https://apps.apple.com/app/munnies" color="emerald">
-                Download Free
+              <Button
+                href={appStoreUrl}
+                color="orange"
+              >
+                Buy for $1.99
               </Button>
             </div>
           </div>

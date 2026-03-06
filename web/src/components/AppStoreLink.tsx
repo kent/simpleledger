@@ -1,6 +1,8 @@
 import Link from 'next/link'
 import clsx from 'clsx'
 
+import { appStoreUrl } from '@/lib/site'
+
 export function AppStoreLink({
   color = 'black',
 }: {
@@ -8,7 +10,7 @@ export function AppStoreLink({
 }) {
   return (
     <Link
-      href="https://apps.apple.com/app/munnies"
+      href={appStoreUrl}
       aria-label="Download on the App Store"
       className={clsx(
         'rounded-lg transition-colors',

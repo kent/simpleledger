@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+export CLOUDSDK_ACTIVE_CONFIG_NAME=munnies-deployer
+exec gcloud "$@"

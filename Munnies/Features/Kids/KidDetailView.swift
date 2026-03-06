@@ -88,7 +88,7 @@ struct KidDetailView: View {
                                 Button {
                                     showingShareSheet = true
                                 } label: {
-                                    Label("Share Ledger", systemImage: "person.badge.plus")
+                                    Label("Share Account", systemImage: "person.badge.plus")
                                 }
                             }
                         } else if shareStatus.isShared {
@@ -139,7 +139,7 @@ struct KidDetailView: View {
                 stopSharing()
             }
         } message: {
-            Text("Others will no longer be able to view or edit \(kid.name ?? "this ledger")'s transactions.")
+            Text("Others will no longer be able to view or edit \(kid.name ?? "this account")'s transactions.")
         }
         .alert("Stop Viewing?", isPresented: $showingLeaveShareAlert) {
             Button("Cancel", role: .cancel) { }
@@ -147,13 +147,19 @@ struct KidDetailView: View {
                 leaveShare()
             }
         } message: {
-            Text("You will no longer be able to view \(kid.name ?? "this ledger")'s transactions.")
+            Text("You will no longer be able to view \(kid.name ?? "this account")'s transactions.")
         }
         .confetti(isShowing: $showConfetti)
         .alert("Error", isPresented: $showingErrorAlert) {
             Button("OK", role: .cancel) { }
         } message: {
             Text(errorMessage ?? "An unknown error occurred")
+        }
+        .onReceive(NotificationCenter.default.publisher(for: .cloudSharingFailed)) { notification in
+            if let error = notification.userInfo?["error"] as? String {
+                errorMessage = error
+                showingErrorAlert = true
+            }
         }
         .onReceive(NotificationCenter.default.publisher(for: .didReceiveRemoteChanges)) { _ in
             // Check if this kid was deleted remotely
@@ -177,7 +183,7 @@ struct KidDetailView: View {
                 .foregroundStyle(.blue)
 
             VStack(alignment: .leading, spacing: 2) {
-                Text("Shared Ledger")
+                Text("Shared Account")
                     .font(.subheadline.bold())
                 if let ownerName = shareStatus.ownerName {
                     Text("Shared by \(ownerName)")

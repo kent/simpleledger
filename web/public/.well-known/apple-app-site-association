@@ -1,0 +1,14 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appID": "PS5W7BFTQ2.com.ewakened.munnies",
+        "paths": ["*"]
+      }
+    ]
+  },
+  "webcredentials": {
+    "apps": ["PS5W7BFTQ2.com.ewakened.munnies"]
+  }
+}

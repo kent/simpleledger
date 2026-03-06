@@ -30,7 +30,7 @@ struct SettingsView: View {
                 } header: {
                     Text("Currency")
                 } footer: {
-                    Text("All balances will be displayed in this currency.")
+                    Text("All balances will be displayed using this money sign and format.")
                 }
 
                 // Sharing Section
@@ -41,7 +41,7 @@ struct SettingsView: View {
                         VStack(alignment: .leading, spacing: 4) {
                             Text("Per-Child Sharing")
                                 .font(.body)
-                            Text("Share individual ledgers by swiping on a child's row")
+                            Text("Share individual accounts by swiping on a child's row")
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
                         }
@@ -50,7 +50,7 @@ struct SettingsView: View {
                 } header: {
                     Text("Sharing")
                 } footer: {
-                    Text("Each child's ledger can be shared independently. Swipe left on a child in the main list and tap 'Share' to invite family members.")
+                    Text("Each child's account can be shared independently. Swipe left on a child in the main list and tap 'Share' to invite family members.")
                 }
 
                 // About Section
@@ -62,8 +62,16 @@ struct SettingsView: View {
                             .foregroundStyle(.secondary)
                     }
 
-                    Link(destination: URL(string: "https://apple.com/privacy")!) {
+                    Link(destination: URL(string: "https://munnies.com/privacy")!) {
                         Label("Privacy Policy", systemImage: "hand.raised.fill")
+                    }
+
+                    Link(destination: URL(string: "https://munnies.com/terms")!) {
+                        Label("Terms of Service", systemImage: "doc.text.fill")
+                    }
+
+                    Link(destination: URL(string: "https://munnies.com/support")!) {
+                        Label("Support", systemImage: "questionmark.circle.fill")
                     }
                 } header: {
                     Text("About")

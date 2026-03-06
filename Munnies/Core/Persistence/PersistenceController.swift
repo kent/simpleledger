@@ -13,51 +13,7 @@ final class PersistenceController: ObservableObject {
 
     static var preview: PersistenceController = {
         let controller = PersistenceController(inMemory: true)
-        let viewContext = controller.container.viewContext
-
-        // Create sample data
-        let kid1 = Kid(context: viewContext)
-        kid1.id = UUID()
-        kid1.name = "Emma"
-        kid1.createdAt = Date()
-        kid1.avatarEmoji = "👧"
-        kid1.colorHex = "FF6B6B"
-
-        let kid2 = Kid(context: viewContext)
-        kid2.id = UUID()
-        kid2.name = "Jack"
-        kid2.createdAt = Date()
-        kid2.avatarEmoji = "👦"
-        kid2.colorHex = "4ECDC4"
-
-        // Add sample transactions
-        let t1 = Transaction(context: viewContext)
-        t1.id = UUID()
-        t1.amount = NSDecimalNumber(value: 25.0)
-        t1.note = "Birthday money from Grandma"
-        t1.createdAt = Date().addingTimeInterval(-86400 * 7)
-        t1.kid = kid1
-
-        let t2 = Transaction(context: viewContext)
-        t2.id = UUID()
-        t2.amount = NSDecimalNumber(value: -5.0)
-        t2.note = "Ice cream"
-        t2.createdAt = Date().addingTimeInterval(-86400 * 2)
-        t2.kid = kid1
-
-        let t3 = Transaction(context: viewContext)
-        t3.id = UUID()
-        t3.amount = NSDecimalNumber(value: 50.0)
-        t3.note = "Christmas money"
-        t3.createdAt = Date().addingTimeInterval(-86400 * 30)
-        t3.kid = kid2
-
-        do {
-            try viewContext.save()
-        } catch {
-            fatalError("Preview data creation failed: \(error)")
-        }
-
+        controller.seedSampleData(forceReset: true)
         return controller
     }()
 
@@ -107,20 +63,20 @@ final class PersistenceController: ObservableObject {
         var loadedStoreCount = 0
 
         container.loadPersistentStores { [weak self] storeDescription, error in
-            if let error = error {
-                DispatchQueue.main.async {
+            let storeName = storeDescription.url?.lastPathComponent ?? "unknown"
+
+            Task { @MainActor [weak self] in
+                if let error {
                     self?.storeLoadError = error
+                    print("Persistent store loading failed for \(storeName): \(error)")
+                    return
                 }
-                print("Persistent store loading failed for \(storeDescription.url?.lastPathComponent ?? "unknown"): \(error)")
-                return
-            }
 
-            loadedStoreCount += 1
-            print("Loaded store: \(storeDescription.url?.lastPathComponent ?? "unknown")")
+                loadedStoreCount += 1
+                print("Loaded store: \(storeName)")
 
-            // Mark stores as loaded when all stores are ready
-            if loadedStoreCount == expectedStoreCount {
-                DispatchQueue.main.async {
+                // Keep the readiness flag in sync once both private and shared stores are available.
+                if loadedStoreCount == expectedStoreCount {
                     self?.storesLoaded = true
                     print("All persistent stores loaded successfully")
                 }
@@ -154,7 +110,7 @@ final class PersistenceController: ObservableObject {
 
         // Configure private store (user's own data)
         privateDescription.cloudKitContainerOptions = NSPersistentCloudKitContainerOptions(
-            containerIdentifier: "iCloud.com.munnies.app"
+            containerIdentifier: "iCloud.com.ewakened.munnies"
         )
         privateDescription.setOption(true as NSNumber, forKey: NSPersistentHistoryTrackingKey)
         privateDescription.setOption(true as NSNumber, forKey: NSPersistentStoreRemoteChangeNotificationPostOptionKey)
@@ -165,7 +121,7 @@ final class PersistenceController: ObservableObject {
         sharedDescription.setOption(true as NSNumber, forKey: NSPersistentStoreRemoteChangeNotificationPostOptionKey)
 
         let sharedOptions = NSPersistentCloudKitContainerOptions(
-            containerIdentifier: "iCloud.com.munnies.app"
+            containerIdentifier: "iCloud.com.ewakened.munnies"
         )
         sharedOptions.databaseScope = .shared
         sharedDescription.cloudKitContainerOptions = sharedOptions
@@ -174,12 +130,11 @@ final class PersistenceController: ObservableObject {
     }
 
     @objc nonisolated private func storeRemoteChange(_ notification: Notification) {
+        guard let storeUUID = notification.userInfo?[NSStoreUUIDKey] as? String else { return }
+
         // Process remote changes on a background context
         let context = container.newBackgroundContext()
         context.perform {
-            // Process persistent history to detect what changed
-            guard let storeUUID = notification.userInfo?[NSStoreUUIDKey] as? String else { return }
-
             // Fetch the history since last processed
             let historyRequest = NSPersistentHistoryChangeRequest.fetchHistory(after: self.lastHistoryToken)
 
@@ -225,7 +180,7 @@ final class PersistenceController: ObservableObject {
     }
 
     /// Token for tracking persistent history processing
-    private var lastHistoryToken: NSPersistentHistoryToken? {
+    nonisolated private var lastHistoryToken: NSPersistentHistoryToken? {
         get {
             guard let data = UserDefaults.standard.data(forKey: "lastHistoryToken") else { return nil }
             return try? NSKeyedUnarchiver.unarchivedObject(ofClass: NSPersistentHistoryToken.self, from: data)
@@ -246,14 +201,26 @@ final class PersistenceController: ObservableObject {
 
         let deadline = Date().addingTimeInterval(timeout)
 
-        while !storesLoaded && Date() < deadline {
+        while !storesLoaded && storeLoadError == nil && Date() < deadline {
             try? await Task.sleep(nanoseconds: 100_000_000) // 0.1 seconds
         }
 
         return storesLoaded
     }
 
+    func initializeCloudKitSchema() throws {
+        try container.initializeCloudKitSchema(options: [])
+    }
+
     // MARK: - Convenience Methods
+
+    func seedSampleDataIfNeeded() {
+        seedSampleData(forceReset: false)
+    }
+
+    func resetAndSeedSampleData() {
+        seedSampleData(forceReset: true)
+    }
 
     func save() {
         let context = container.viewContext
@@ -264,6 +231,172 @@ final class PersistenceController: ObservableObject {
         } catch {
             print("Failed to save context: \(error)")
         }
+    }
+
+    private func seedSampleData(forceReset: Bool) {
+        let context = container.viewContext
+
+        if forceReset {
+            clearKidsAndTransactions(in: context)
+        } else {
+            let existingKids = fetchAllKids()
+            guard existingKids.privateKids.isEmpty && existingKids.sharedKids.isEmpty else { return }
+        }
+
+        let now = Date()
+
+        let emma = createKid(
+            name: "Emma",
+            emoji: "👧",
+            colorHex: "FF6B6B",
+            createdAt: now.addingTimeInterval(-86400 * 28),
+            in: context
+        )
+        addTransaction(
+            amount: 80,
+            note: "Birthday card from Nana",
+            createdByName: "Kent",
+            createdAt: now.addingTimeInterval(-86400 * 21),
+            to: emma,
+            in: context
+        )
+        addTransaction(
+            amount: 25,
+            note: "Tooth fairy",
+            createdByName: "Kent",
+            createdAt: now.addingTimeInterval(-86400 * 10),
+            to: emma,
+            in: context
+        )
+        addTransaction(
+            amount: -12.5,
+            note: "Craft supplies",
+            createdByName: "Kent",
+            createdAt: now.addingTimeInterval(-86400 * 3),
+            to: emma,
+            in: context
+        )
+        addTransaction(
+            amount: 40,
+            note: "Lemonade stand",
+            createdByName: "Kent",
+            createdAt: now.addingTimeInterval(-3600 * 18),
+            to: emma,
+            in: context
+        )
+
+        let jack = createKid(
+            name: "Jack",
+            emoji: "🧒",
+            colorHex: "4ECDC4",
+            createdAt: now.addingTimeInterval(-86400 * 22),
+            in: context
+        )
+        addTransaction(
+            amount: 60,
+            note: "Allowance catch-up",
+            createdByName: "Kent",
+            createdAt: now.addingTimeInterval(-86400 * 14),
+            to: jack,
+            in: context
+        )
+        addTransaction(
+            amount: -7.75,
+            note: "Comic book",
+            createdByName: "Kent",
+            createdAt: now.addingTimeInterval(-86400 * 6),
+            to: jack,
+            in: context
+        )
+        addTransaction(
+            amount: 35,
+            note: "Helped wash the car",
+            createdByName: "Kent",
+            createdAt: now.addingTimeInterval(-3600 * 8),
+            to: jack,
+            in: context
+        )
+
+        let sophie = createKid(
+            name: "Sophie",
+            emoji: "👑",
+            colorHex: "F39C12",
+            createdAt: now.addingTimeInterval(-86400 * 35),
+            in: context
+        )
+        addTransaction(
+            amount: 120,
+            note: "Holiday money",
+            createdByName: "Kent",
+            createdAt: now.addingTimeInterval(-86400 * 30),
+            to: sophie,
+            in: context
+        )
+        addTransaction(
+            amount: 45,
+            note: "Babysitting savings",
+            createdByName: "Kent",
+            createdAt: now.addingTimeInterval(-86400 * 12),
+            to: sophie,
+            in: context
+        )
+        addTransaction(
+            amount: -18,
+            note: "Book fair",
+            createdByName: "Kent",
+            createdAt: now.addingTimeInterval(-86400 * 1),
+            to: sophie,
+            in: context
+        )
+
+        save()
+    }
+
+    private func clearKidsAndTransactions(in context: NSManagedObjectContext) {
+        let kidRequest = NSFetchRequest<Kid>(entityName: "Kid")
+
+        do {
+            let kids = try context.fetch(kidRequest)
+            kids.forEach(context.delete)
+            if context.hasChanges {
+                try context.save()
+            }
+        } catch {
+            print("Failed to clear sample data: \(error)")
+        }
+    }
+
+    private func createKid(
+        name: String,
+        emoji: String,
+        colorHex: String,
+        createdAt: Date,
+        in context: NSManagedObjectContext
+    ) -> Kid {
+        let kid = Kid(context: context)
+        kid.id = UUID()
+        kid.name = name
+        kid.avatarEmoji = emoji
+        kid.colorHex = colorHex
+        kid.createdAt = createdAt
+        return kid
+    }
+
+    private func addTransaction(
+        amount: Decimal,
+        note: String,
+        createdByName: String,
+        createdAt: Date,
+        to kid: Kid,
+        in context: NSManagedObjectContext
+    ) {
+        let transaction = Transaction(context: context)
+        transaction.id = UUID()
+        transaction.amount = NSDecimalNumber(decimal: amount)
+        transaction.note = note
+        transaction.createdByName = createdByName
+        transaction.createdAt = createdAt
+        transaction.kid = kid
     }
 
     /// Determines which store an object belongs to (private or shared)
@@ -406,7 +539,7 @@ final class PersistenceController: ObservableObject {
 
         // Create new share for this Kid
         let (_, share, _) = try await container.share([kid], to: nil)
-        share[CKShare.SystemFieldKey.title] = "\(kid.name ?? "Child")'s Ledger"
+        share[CKShare.SystemFieldKey.title] = "\(kid.name ?? "Child")'s Account"
 
         return share
     }
@@ -415,7 +548,7 @@ final class PersistenceController: ObservableObject {
     func stopSharing(kid: Kid) async throws {
         guard let share = try fetchShare(for: kid) else { return }
 
-        let cloudContainer = CKContainer(identifier: "iCloud.com.munnies.app")
+        let cloudContainer = CKContainer(identifier: "iCloud.com.ewakened.munnies")
         try await cloudContainer.privateCloudDatabase.deleteRecord(withID: share.recordID)
     }
 
@@ -424,7 +557,7 @@ final class PersistenceController: ObservableObject {
         let status = shareStatus(for: kid)
         guard let share = status.share, !status.isOwner else { return }
 
-        let cloudContainer = CKContainer(identifier: "iCloud.com.munnies.app")
+        let cloudContainer = CKContainer(identifier: "iCloud.com.ewakened.munnies")
         let operation = CKModifyRecordZonesOperation(
             recordZonesToSave: nil,
             recordZoneIDsToDelete: [share.recordID.zoneID]

@@ -21,7 +21,7 @@ export default function TermsPage() {
             </h1>
             <div className="mt-8 prose prose-gray">
               <p className="text-gray-600">
-                Last updated: January 2025
+                Last updated: March 2026
               </p>
 
               <h2 className="mt-8 text-xl font-semibold text-gray-900">

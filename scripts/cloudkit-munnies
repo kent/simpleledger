@@ -1,0 +1,205 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+cd "$ROOT_DIR"
+
+TEAM_ID="${CLOUDKIT_TEAM_ID:-PS5W7BFTQ2}"
+CONTAINER_ID="${CLOUDKIT_CONTAINER_ID:-iCloud.com.ewakened.munnies}"
+SCHEMA_DIR="${CLOUDKIT_SCHEMA_DIR:-$ROOT_DIR/cloudkit/schema}"
+TOKEN="${CLOUDKIT_MANAGEMENT_TOKEN:-}"
+
+ensure_cktool() {
+  if ! xcrun --find cktool >/dev/null 2>&1; then
+    echo "cktool is not available. Install Xcode command line tools first." >&2
+    exit 1
+  fi
+}
+
+ensure_schema_dir() {
+  mkdir -p "$SCHEMA_DIR"
+}
+
+schema_file_for_environment() {
+  local environment="$1"
+  echo "$SCHEMA_DIR/${environment}.ckschema"
+}
+
+cktool_args() {
+  local args=(
+    --team-id "$TEAM_ID"
+    --container-id "$CONTAINER_ID"
+  )
+
+  if [[ -n "$TOKEN" ]]; then
+    args+=(--token "$TOKEN")
+  fi
+
+  printf '%s\n' "${args[@]}"
+}
+
+run_cktool() {
+  local subcommand="$1"
+  shift
+
+  local args=()
+  while IFS= read -r line; do
+    args+=("$line")
+  done < <(cktool_args)
+
+  xcrun cktool "$subcommand" "${args[@]}" "$@"
+}
+
+run_global_cktool() {
+  local subcommand="$1"
+  shift
+
+  if [[ -n "$TOKEN" ]]; then
+    xcrun cktool "$subcommand" --token "$TOKEN" "$@"
+  else
+    xcrun cktool "$subcommand" "$@"
+  fi
+}
+
+doctor() {
+  ensure_cktool
+
+  cat <<EOF
+CloudKit config
+  team id:      $TEAM_ID
+  container id: $CONTAINER_ID
+  schema dir:   $SCHEMA_DIR
+  token source: $(if [[ -n "$TOKEN" ]]; then echo "CLOUDKIT_MANAGEMENT_TOKEN"; else echo "cktool built-in lookup"; fi)
+EOF
+
+  if ! run_global_cktool get-teams; then
+    cat <<'EOF' >&2
+
+No CloudKit management token is configured.
+Create a management token in CloudKit Console, then either:
+  1. run ./scripts/cloudkit-munnies save-token
+  2. export CLOUDKIT_MANAGEMENT_TOKEN=...
+EOF
+    exit 1
+  fi
+}
+
+save_token() {
+  ensure_cktool
+  xcrun cktool save-token --type management --method keychain "$@"
+}
+
+export_schema() {
+  ensure_cktool
+  ensure_schema_dir
+
+  local environment="${1:-development}"
+  local output_file="${2:-$(schema_file_for_environment "$environment")}"
+
+  run_cktool export-schema \
+    --environment "$environment" \
+    --output-file "$output_file"
+
+  echo "Exported $environment schema to $output_file"
+}
+
+validate_schema() {
+  ensure_cktool
+
+  local environment="${1:-production}"
+  local schema_file="${2:-$(schema_file_for_environment development)}"
+
+  if [[ "$environment" == "production" ]]; then
+    echo "cktool validate-schema is not available for the production environment." >&2
+    echo "Use import production without a separate validation step." >&2
+    exit 1
+  fi
+
+  run_cktool validate-schema \
+    --environment "$environment" \
+    --file "$schema_file"
+}
+
+import_schema() {
+  ensure_cktool
+
+  local environment="${1:-production}"
+  local schema_file="${2:-$(schema_file_for_environment development)}"
+
+  if [[ "$environment" == "production" ]]; then
+    cat <<EOF >&2
+cktool production schema import is not accepted for this container from the CLI.
+Use CloudKit Console with the same container and click:
+  Deploy Schema Changes...
+
+The development schema is ready at:
+  $schema_file
+EOF
+    exit 1
+  else
+    run_cktool import-schema \
+      --environment "$environment" \
+      --validate \
+      --file "$schema_file"
+  fi
+}
+
+command="${1:-help}"
+shift || true
+
+case "$command" in
+  doctor)
+    doctor "$@"
+    ;;
+  save-token)
+    save_token "$@"
+    ;;
+  teams)
+    ensure_cktool
+    run_global_cktool get-teams "$@"
+    ;;
+  export)
+    export_schema "$@"
+    ;;
+  validate)
+    validate_schema "$@"
+    ;;
+  import)
+    import_schema "$@"
+    ;;
+  help|-h|--help)
+    cat <<'EOF'
+Usage: scripts/cloudkit-munnies <command> [arguments]
+
+Commands:
+  doctor                       Print config and verify CloudKit token access
+  save-token                   Save a CloudKit management token into the keychain
+  teams                        List available Apple Developer teams for the token
+  export [env] [file]          Export a schema file from development or production
+  validate [env] [file]        Validate a schema file against a non-production environment
+  import [env] [file]          Import a schema file into a non-production environment
+
+Defaults:
+  team id:      PS5W7BFTQ2
+  container id: iCloud.com.ewakened.munnies
+  schema dir:   cloudkit/schema
+
+Environment overrides:
+  CLOUDKIT_MANAGEMENT_TOKEN    Optional management token instead of keychain lookup
+  CLOUDKIT_TEAM_ID             Override Apple Developer team id
+  CLOUDKIT_CONTAINER_ID        Override iCloud container id
+  CLOUDKIT_SCHEMA_DIR          Override schema output directory
+
+Examples:
+  scripts/cloudkit-munnies doctor
+  scripts/cloudkit-munnies save-token
+  scripts/cloudkit-munnies export development
+  scripts/cloudkit-munnies import development cloudkit/schema/development.ckschema
+EOF
+    ;;
+  *)
+    echo "Unknown command: $command" >&2
+    echo "Run scripts/cloudkit-munnies --help for usage." >&2
+    exit 1
+    ;;
+esac

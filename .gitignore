@@ -35,6 +35,19 @@ Carthage/Build/
 .env
 .env.local
 .env.*.local
+fastlane/.env
+fastlane/.env.local
+fastlane/.env.*.local
+
+# Ruby / fastlane
+.bundle/
+vendor/bundle/
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/README.md
+fastlane/test_output/
+fastlane/keys/
+fastlane/AuthKey_*.p8
 
 # Web (Next.js)
 web/node_modules/

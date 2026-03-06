@@ -6,6 +6,7 @@ final class CurrencyManager: ObservableObject {
     static let shared = CurrencyManager()
 
     @Published var currencyCode: String = "USD"
+    private static let genericCurrencyCodes: Set<String> = Set(supportedCurrencies.map(\.code))
 
     private init() {
         loadCurrency()
@@ -15,13 +16,14 @@ final class CurrencyManager: ObservableObject {
         // Load from UserDefaults for quick access
         // The AppSettings entity is used for CloudKit sync
         if let saved = UserDefaults.standard.string(forKey: "currencyCode") {
-            currencyCode = saved
+            currencyCode = Self.normalizedCurrencyCode(saved)
         }
     }
 
     func setCurrency(_ code: String, in context: NSManagedObjectContext) {
-        currencyCode = code
-        UserDefaults.standard.set(code, forKey: "currencyCode")
+        let normalizedCode = Self.normalizedCurrencyCode(code)
+        currencyCode = normalizedCode
+        UserDefaults.standard.set(normalizedCode, forKey: "currencyCode")
 
         // Also save to Core Data for CloudKit sync
         let request = NSFetchRequest<AppSettings>(entityName: "AppSettings")
@@ -29,11 +31,11 @@ final class CurrencyManager: ObservableObject {
 
         do {
             if let settings = try context.fetch(request).first {
-                settings.currencyCode = code
+                settings.currencyCode = normalizedCode
             } else {
                 let settings = AppSettings(context: context)
                 settings.id = UUID()
-                settings.currencyCode = code
+                settings.currencyCode = normalizedCode
             }
             try context.save()
         } catch {
@@ -42,23 +44,31 @@ final class CurrencyManager: ObservableObject {
     }
 
     static let supportedCurrencies: [(code: String, name: String, symbol: String)] = [
-        ("USD", "US Dollar", "$"),
+        ("USD", "Dollar", "$"),
         ("EUR", "Euro", "€"),
-        ("GBP", "British Pound", "£"),
-        ("CAD", "Canadian Dollar", "C$"),
-        ("AUD", "Australian Dollar", "A$"),
-        ("JPY", "Japanese Yen", "¥"),
-        ("CHF", "Swiss Franc", "CHF"),
-        ("CNY", "Chinese Yuan", "¥"),
-        ("INR", "Indian Rupee", "₹"),
-        ("MXN", "Mexican Peso", "$"),
-        ("BRL", "Brazilian Real", "R$"),
-        ("KRW", "South Korean Won", "₩"),
-        ("SEK", "Swedish Krona", "kr"),
-        ("NOK", "Norwegian Krone", "kr"),
-        ("DKK", "Danish Krone", "kr"),
-        ("NZD", "New Zealand Dollar", "NZ$"),
-        ("SGD", "Singapore Dollar", "S$"),
-        ("HKD", "Hong Kong Dollar", "HK$"),
+        ("GBP", "Pound", "£"),
+        ("JPY", "Yen", "¥"),
+        ("CNY", "Yuan", "¥"),
+        ("CHF", "Franc", "CHF"),
+        ("INR", "Rupee", "₹"),
+        ("MXN", "Peso", "$"),
+        ("BRL", "Real", "R$"),
+        ("KRW", "Won", "₩"),
+        ("SEK", "Krona", "kr"),
     ]
+
+    private static func normalizedCurrencyCode(_ code: String) -> String {
+        if genericCurrencyCodes.contains(code) {
+            return code
+        }
+
+        switch code {
+        case "CAD", "AUD", "NZD", "SGD", "HKD":
+            return "USD"
+        case "NOK", "DKK":
+            return "SEK"
+        default:
+            return "USD"
+        }
+    }
 }

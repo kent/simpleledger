@@ -108,7 +108,7 @@ const testimonials = [
   },
   {
     content:
-      'Best free app I\'ve downloaded this year. And I download a LOT of apps.',
+      'Best $1.99 I\'ve spent on an app this year. And I download a LOT of apps.',
     author: 'Jack',
     role: 'Dad and app enthusiast',
     emoji: '📱',

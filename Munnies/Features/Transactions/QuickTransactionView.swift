@@ -9,6 +9,8 @@ struct QuickTransactionView: View {
     @StateObject private var currencyManager = CurrencyManager.shared
 
     var initialIsAdding: Bool? = nil
+    var initialDisplayValue: String? = nil
+    var initialNote: String? = nil
 
     @State private var displayValue = "0"
     @State private var isAdding = true
@@ -108,6 +110,13 @@ struct QuickTransactionView: View {
         .onAppear {
             if let initial = initialIsAdding {
                 isAdding = initial
+            }
+            if let initialDisplayValue, !initialDisplayValue.isEmpty {
+                displayValue = initialDisplayValue
+            }
+            if let initialNote, !initialNote.isEmpty {
+                note = initialNote
+                showingNoteField = true
             }
         }
     }

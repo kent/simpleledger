@@ -1,62 +1,82 @@
-import { type Metadata } from 'next'
-import { Inter } from 'next/font/google'
+import { type Metadata, type Viewport } from 'next'
+import { Manrope } from 'next/font/google'
 import clsx from 'clsx'
 
+import { appStoreId, siteUrl } from '@/lib/site'
 import '@/styles/tailwind.css'
 
-const inter = Inter({
+const manrope = Manrope({
   subsets: ['latin'],
   display: 'swap',
-  variable: '--font-inter',
+  variable: '--font-manrope',
 })
 
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  themeColor: '#10B981',
+}
+
 export const metadata: Metadata = {
-  metadataBase: new URL('https://munnies.app'),
+  metadataBase: new URL(siteUrl),
   title: {
     template: '%s | Munnies',
-    default: 'Munnies - Track Your Kids\' Allowance & Spending',
+    default: 'Munnies | Family Money Accounts for Allowance, Chores, and Spending',
   },
   description:
-    'Munnies helps parents easily track allowances, chore earnings, and spending for each child. Share ledgers with family, sync across devices, and teach kids about money.',
+    'Munnies helps families track allowance, chores, gifts, and spending in simple shared accounts for each child. Sync with iCloud, invite family, and pay once.',
+  applicationName: 'Munnies',
   keywords: [
-    'kids allowance tracker',
-    'children money management',
-    'family finance app',
-    'allowance app for parents',
+    'allowance tracker',
+    'kids money app',
+    'family allowance app',
     'kids spending tracker',
-    'chore money tracker',
-    'family budget app',
-    'teach kids about money',
-    'allowance manager',
-    'kids piggy bank app',
+    'chore tracker',
+    'money accounts for kids',
+    'family finance app',
+    'one time purchase app',
+    'iCloud family sharing app',
+    'allowance app for parents',
   ],
   authors: [{ name: 'Munnies' }],
   creator: 'Munnies',
   publisher: 'Munnies',
+  formatDetection: {
+    telephone: false,
+  },
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: 'https://munnies.app',
+    url: siteUrl,
     siteName: 'Munnies',
-    title: 'Munnies - Track Your Kids\' Allowance & Spending',
+    title: 'Munnies | Shared Family Money Accounts Without the Subscription',
     description:
-      'The easiest way for parents to track allowances, gifts, and spending for each child. Share with family and sync across all your devices.',
+      'Track allowance, chores, gifts, and spending in private iCloud-backed family accounts for each child.',
     images: [
       {
-        url: '/og-image.png',
-        width: 1200,
-        height: 630,
-        alt: 'Munnies - Family Allowance Tracker',
+        url: '/munnies-mark.png',
+        width: 1024,
+        height: 1024,
+        alt: 'Munnies app icon',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Munnies - Track Your Kids\' Allowance & Spending',
+    title: 'Munnies | Family Money Accounts Without the Subscription',
     description:
-      'The easiest way for parents to track allowances, gifts, and spending for each child.',
-    images: ['/og-image.png'],
+      'Keep kid accounts organized across iPhone and iPad, sync with iCloud, and pay once.',
+    images: ['/munnies-mark.png'],
   },
+  appleWebApp: {
+    capable: true,
+    title: 'Munnies',
+    statusBarStyle: 'black-translucent',
+  },
+  itunes: {
+    appId: appStoreId,
+  },
+  category: 'finance',
   robots: {
     index: true,
     follow: true,
@@ -68,10 +88,20 @@ export const metadata: Metadata = {
       'max-snippet': -1,
     },
   },
-  alternates: {
-    canonical: 'https://munnies.app',
+  verification: {
+    google: 'P2leN9QSSuL2pdXpqe5-JLyw-Dw_-VMriBKpnDNRbcw',
   },
-  category: 'finance',
+  icons: {
+    icon: [
+      { url: '/favicon.ico', sizes: 'any' },
+      { url: '/icon-192.png', type: 'image/png', sizes: '192x192' },
+      { url: '/icon-512.png', type: 'image/png', sizes: '512x512' },
+    ],
+    apple: [
+      { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
+    ],
+  },
+  manifest: '/manifest.json',
 }
 
 export default function RootLayout({
@@ -80,11 +110,10 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className={clsx('bg-gray-50 antialiased', inter.variable)}>
+    <html lang="en" className={clsx('bg-gray-50 antialiased', manrope.variable)}>
       <head>
-        <link rel="icon" href="/favicon.ico" sizes="any" />
-        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-        <meta name="apple-itunes-app" content="app-id=YOUR_APP_ID" />
+        <link rel="canonical" href={siteUrl} />
+        <meta name="apple-itunes-app" content={`app-id=${appStoreId}`} />
       </head>
       <body>{children}</body>
     </html>

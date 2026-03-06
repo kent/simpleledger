@@ -1,12 +1,13 @@
 import Link from 'next/link'
 
 import { Container } from '@/components/Container'
+import { appStoreUrl } from '@/lib/site'
 import { Logomark } from '@/components/Logo'
 import { NavLinks } from '@/components/NavLinks'
 
 export function Footer() {
   return (
-    <footer className="border-t border-gray-200 bg-gray-50">
+    <footer className="border-t border-gray-200">
       <Container>
         <div className="flex flex-col items-start justify-between gap-y-12 pt-16 pb-6 lg:flex-row lg:items-center lg:py-16">
           <div>
@@ -14,8 +15,8 @@ export function Footer() {
               <Logomark className="h-10 w-10 flex-none" />
               <div className="ml-4">
                 <p className="text-base font-semibold">Munnies</p>
-                <p className="mt-1 text-sm text-gray-600">
-                  Making parenting one IOU easier 💚
+                <p className="mt-1 text-sm">
+                  Shared family accounts for allowance, chores, gifts, and spending.
                 </p>
               </div>
             </div>
@@ -23,31 +24,38 @@ export function Footer() {
               <NavLinks />
             </nav>
           </div>
-          <div className="rounded-2xl bg-white p-6 shadow-sm lg:w-72">
-            <p className="text-base font-semibold text-gray-900">
-              <Link href="https://apps.apple.com/app/munnies" className="hover:text-emerald-600">
-                📱 Get the app
-              </Link>
-            </p>
-            <p className="mt-2 text-sm text-gray-600">
-              Free on the App Store. No account needed. Start tracking in 30 seconds!
-            </p>
+          <div className="group relative -mx-4 flex items-center self-stretch p-4 transition-colors hover:bg-gray-100 sm:self-auto sm:rounded-2xl lg:mx-0 lg:self-auto lg:p-6">
+            <div className="relative flex h-24 w-24 flex-none items-center justify-center rounded-full bg-orange-100">
+              <svg className="h-12 w-12 text-orange-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
+              </svg>
+            </div>
+            <div className="ml-8 lg:w-64">
+              <p className="text-base font-semibold text-gray-900">
+                <Link href={appStoreUrl}>
+                  <span className="absolute inset-0 sm:rounded-2xl" />
+                  Buy on the App Store
+                </Link>
+              </p>
+              <p className="mt-1 text-sm text-gray-700">
+                One-time purchase. No subscription. Available for iPhone and iPad.
+              </p>
+            </div>
           </div>
         </div>
-        <div className="flex flex-col items-center border-t border-gray-200 pt-8 pb-12 md:flex-row-reverse md:justify-between md:pt-6">
-          <div className="flex gap-6 text-sm text-gray-500">
-            <Link href="/privacy" className="hover:text-gray-900">
-              Privacy
-            </Link>
-            <Link href="/terms" className="hover:text-gray-900">
-              Terms
-            </Link>
-            <a href="mailto:support@munnies.app" className="hover:text-gray-900">
-              Contact
-            </a>
+        <div className="flex flex-col items-center border-t border-gray-200 pt-8 pb-12 md:pt-6">
+          <div className="flex flex-col items-center gap-4 md:flex-row md:justify-between md:w-full">
+            <p className="text-sm text-gray-500">
+              &copy; {new Date().getFullYear()} Munnies. All rights reserved.
+            </p>
+            <div className="flex gap-6 text-sm text-gray-600">
+              <Link href="/privacy" className="hover:text-gray-900">Privacy Policy</Link>
+              <Link href="/terms" className="hover:text-gray-900">Terms of Service</Link>
+              <Link href="/support" className="hover:text-gray-900">Support</Link>
+            </div>
           </div>
-          <p className="mt-6 text-sm text-gray-500 md:mt-0">
-            Made with 💚 by parents, for parents. &copy; {new Date().getFullYear()} Munnies
+          <p className="mt-6 text-sm text-gray-400">
+            Built for families who want a simple, private way to track kids&apos; money.
           </p>
         </div>
       </Container>

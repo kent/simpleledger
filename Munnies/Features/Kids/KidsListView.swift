@@ -87,6 +87,12 @@ struct KidsListView: View {
                     showingErrorAlert = true
                 }
             }
+            .onReceive(NotificationCenter.default.publisher(for: .cloudSharingFailed)) { notification in
+                if let error = notification.userInfo?["error"] as? String {
+                    errorMessage = error
+                    showingErrorAlert = true
+                }
+            }
             .alert("Sharing Error", isPresented: $showingErrorAlert) {
                 Button("OK", role: .cancel) { }
             } message: {
@@ -151,6 +157,18 @@ struct KidsListView: View {
             .buttonStyle(.borderedProminent)
             .clipShape(Capsule())
 
+            Button {
+                persistenceController.seedSampleDataIfNeeded()
+                refreshKids()
+            } label: {
+                Label("Load Demo Data", systemImage: "sparkles")
+                    .font(.subheadline.weight(.semibold))
+                    .padding(.horizontal, 20)
+                    .padding(.vertical, 10)
+            }
+            .buttonStyle(.bordered)
+            .clipShape(Capsule())
+
             Spacer()
         }
     }
@@ -167,7 +185,7 @@ struct KidsListView: View {
                             .font(.system(size: 36, weight: .bold, design: .rounded))
 
                         HStack(spacing: 12) {
-                            Label("\(allKids.count) ledger\(allKids.count == 1 ? "" : "s")", systemImage: "book.closed.fill")
+                            Label("\(allKids.count) account\(allKids.count == 1 ? "" : "s")", systemImage: "book.closed.fill")
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
 
@@ -183,7 +201,7 @@ struct KidsListView: View {
                 .padding(.vertical, 8)
             }
 
-            // My Ledgers section (private kids)
+            // My Accounts section (private kids)
             if !privateKids.isEmpty {
                 Section {
                     ForEach(privateKids) { kid in
@@ -208,9 +226,9 @@ struct KidsListView: View {
                                 .tint(.blue)
                             }
                         }
-                    }
-                } header: {
-                    Label("My Ledgers", systemImage: "book.closed.fill")
+                }
+            } header: {
+                    Label("My Accounts", systemImage: "book.closed.fill")
                         .textCase(nil)
                 }
             }
